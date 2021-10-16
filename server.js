@@ -1,6 +1,30 @@
 // load .env data into process.env
 require("dotenv").config();
 
+const axios = require("axios").default;
+
+const options = {
+  method: 'GET',
+  url: 'https://unogsng.p.rapidapi.com/search',
+  params: {
+    type: 'series',
+    start_year: '1972',
+    orderby: 'rating',
+    audiosubtitle_andor: 'and',
+    limit: '100',
+    subtitle: 'english',
+    countrylist: '33',
+    audio: 'english',
+    country_andorunique: 'or',
+    offset: '0',
+    end_year: '2020'
+  },
+  headers: {
+    'x-rapidapi-host': process.env.API_HOST_UNOGSNG,
+    'x-rapidapi-key': process.env.API_KEY_UNOGSNG
+  }
+};
+
 // Web server config
 const PORT = process.env.PORT || 8080;
 const sassMiddleware = require("./lib/sass-middleware");
@@ -48,7 +72,13 @@ app.use("/api/widgets", widgetsRoutes(db));
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 
+
 app.get("/", (req, res) => {
+  axios.request(options).then(function (response) {
+    console.log(response.data.results[0]);
+  }).catch(function (error) {
+    console.error(error);
+  });
   res.render("index");
 });
 
