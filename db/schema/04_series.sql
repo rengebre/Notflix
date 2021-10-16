@@ -5,7 +5,7 @@ CREATE TABLE series (
   avgrating REAL,
   clist INTEGER,
   imdbid VARCHAR(50),
-  imbdrating REAL,
+  imdbrating REAL,
   img TEXT,
   nfid INTEGER,
   poster TEXT,

@@ -5,7 +5,7 @@ CREATE TABLE movies (
   avgrating REAL,
   clist TEXT,
   imdbid VARCHAR(50),
-  imbdrating REAL,
+  imdbrating REAL,
   img TEXT,
   nfid INTEGER,
   poster TEXT,
