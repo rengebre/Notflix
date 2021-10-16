@@ -3,28 +3,6 @@ require("dotenv").config();
 
 const axios = require("axios").default;
 
-const options = {
-  method: 'GET',
-  url: 'https://unogsng.p.rapidapi.com/search',
-  params: {
-    type: 'series',
-    start_year: '1972',
-    orderby: 'rating',
-    audiosubtitle_andor: 'and',
-    limit: '100',
-    subtitle: 'english',
-    countrylist: '33',
-    audio: 'english',
-    country_andorunique: 'or',
-    offset: '0',
-    end_year: '2020'
-  },
-  headers: {
-    'x-rapidapi-host': process.env.API_HOST_UNOGSNG,
-    'x-rapidapi-key': process.env.API_KEY_UNOGSNG
-  }
-};
-
 // Web server config
 const PORT = process.env.PORT || 8080;
 const sassMiddleware = require("./lib/sass-middleware");
@@ -74,8 +52,67 @@ app.use("/api/widgets", widgetsRoutes(db));
 
 
 app.get("/", (req, res) => {
+  //Unogs API fetch parameters
+  const options = {
+    method: 'GET',
+    url: 'https://unogsng.p.rapidapi.com/search',
+    params: {
+      type: 'movie',
+      start_year: '1972',
+      limit: '100',
+      subtitle: 'english',
+      countrylist: '33',
+      country_andorunique: 'or',
+      offset: '100',
+      end_year: '2021'
+    },
+    headers: {
+      'x-rapidapi-host': process.env.API_HOST_UNOGSNG,
+      'x-rapidapi-key': process.env.API_KEY_UNOGSNG
+    }
+  };
+
+  // Fetch Unogs API data
   axios.request(options).then(function (response) {
-    console.log(response.data.results[0]);
+    console.log(response.data.results);
+    let dataArray = response.data.results;
+    dataArray.forEach((elem) => {
+      queryParams = [
+        elem.id,
+        elem.avgrating,
+        elem.clist,
+        elem.imdbid,
+        elem.imdbrating,
+        elem.img,
+        elem.nfid,
+        elem.poster,
+        elem.runtime,
+        elem.synopsis,
+        elem.title,
+        elem.titledate,
+        elem.top250,
+        elem.top250tv,
+        elem.year
+      ];
+
+      db.query(`INSERT INTO movies (unogs_id, avgrating, clist, imdbid, imdbrating, img, nfid, poster, runtime, synopsis, title, titledate, top250, top250tv, year) VALUES (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        $6,
+        $7,
+        $8,
+        $9,
+        $10,
+        $11,
+        $12,
+        $13,
+        $14,
+        $15
+      ) ON CONFLICT DO NOTHING;`, queryParams)
+    });
   }).catch(function (error) {
     console.error(error);
   });
