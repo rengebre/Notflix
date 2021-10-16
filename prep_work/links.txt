@@ -1,3 +1,5 @@
 Wireframe drawing - https://excalidraw.com/#room=a6c2fe76b2485e87808c,Vb05dcFabrcJD1xW2-VIGQ
 ERD - https://excalidraw.com/#room=546dfc6038a108a9d58b,TnDND5MBU0JN3tt-ecKYvw
 API - https://rapidapi.com/unogs/api/unogsng
+google doc - https://docs.google.com/document/d/12Znov_XZgyhLxFmLqq-0ifGEfaEUWlNwpenWE-OmYPA/edit
+
