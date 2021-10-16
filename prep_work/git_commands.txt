@@ -1,0 +1,2 @@
+working with branches - pulling a new branch from the remote repo
+  1) git switch <branch name>
