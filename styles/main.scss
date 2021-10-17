@@ -3,15 +3,148 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  flex-direction: column;
 
-  background: rgb(163, 208, 219);
-  background: linear-gradient(
-    227deg,
-    rgba(163, 208, 219, 1) 0%,
-    rgba(163, 176, 219, 1) 20%,
-    rgba(163, 173, 219, 1) 34%,
-    rgba(163, 219, 208, 1) 59%,
-    rgba(163, 208, 219, 1) 74%,
-    rgba(163, 208, 219, 1) 100%
-  );
+  background-color: #000000;
+  background-image: url("https://www.transparenttextures.com/patterns/binding-dark.png");
+
+  // background: rgb(163, 208, 219);
+  // background: linear-gradient(
+  //   227deg,
+  //   rgba(163, 208, 219, 1) 0%,
+  //   rgba(163, 176, 219, 1) 20%,
+  //   rgba(163, 173, 219, 1) 34%,
+  //   rgba(163, 219, 208, 1) 59%,
+  //   rgba(163, 208, 219, 1) 74%,
+  //   rgba(163, 208, 219, 1) 100%
+  // );
+
+  nav {
+    span {
+      font-family: 'Bebas Neue', cursive;
+      color: red;
+      font-size: xx-large;
+      font-weight: bold;
+    }
+
+    button {
+      background-color: black;
+      color: white;
+      border-radius: 2em;
+      margin: 0 0.3em 0.3em 0;
+      padding: 0.3em 1.2em 0 0.3em;
+      border-width: inherit;
+      margin-top: 7px;
+    }
+
+    button:hover {
+      color: darkgray;
+    }
+
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: black;
+    height: 80px;
+  }
+
+  p {
+    color: white;
+    text-align: center;
+    margin-right: 200px;
+    margin-left: 200px;
+    font-size: x-large;
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .button {
+    margin-right: 250px;
+    margin-left: 250px;
+    margin-top: 13px;
+
+    --offset: 10px;
+    --border-size: 2px;
+
+    display: block;
+    position: relative;
+    padding: 1.5em 3em;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: red;
+    text-transform: uppercase;
+    letter-spacing: .25em;
+    outline: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 0;
+    box-shadow: inset 0 0 0 var(--border-size) currentcolor;
+    transition: background .8s ease;
+
+    &__horizontal,
+    &__vertical {
+      position: absolute;
+      top: var(--horizontal-offset, 0);
+      right: var(--vertical-offset, 0);
+      bottom: var(--horizontal-offset, 0);
+      left: var(--vertical-offset, 0);
+      transition: transform .8s ease;
+      will-change: transform;
+
+      &::before {
+        content: '';
+        position: absolute;
+        border: inherit;
+      }
+    }
+
+    &__horizontal {
+      --vertical-offset: calc(var(--offset) * -1);
+      border-top: var(--border-size) solid currentcolor;
+      border-bottom: var(--border-size) solid currentcolor;
+
+      &::before {
+        top: calc(var(--vertical-offset) - var(--border-size));
+        bottom: calc(var(--vertical-offset) - var(--border-size));
+        left: calc(var(--vertical-offset) * -1);
+        right: calc(var(--vertical-offset) * -1);
+      }
+    }
+
+    &__vertical {
+      --horizontal-offset: calc(var(--offset) * -1);
+      border-left: var(--border-size) solid currentcolor;
+      border-right: var(--border-size) solid currentcolor;
+
+      &::before {
+        top: calc(var(--horizontal-offset) * -1);
+        bottom: calc(var(--horizontal-offset) * -1);
+        left: calc(var(--horizontal-offset) - var(--border-size));
+        right: calc(var(--horizontal-offset) - var(--border-size));
+      }
+    }
+  }
+
+  .button:hover {
+    color: crimson;
+  }
+
+  footer {
+    background-color: grey;
+    height: 50px;
+    bottom: 0px;
+    position: fixed;
+    width: 100%;
+  }
+
+  background-image: url("images/theater_chairs.jpg");
 }

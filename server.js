@@ -73,49 +73,49 @@ app.get("/", (req, res) => {
   };
 
   // Fetch Unogs API data
-  axios.request(options).then(function (response) {
-    console.log(response.data.results);
-    let dataArray = response.data.results;
-    dataArray.forEach((elem) => {
-      queryParams = [
-        elem.id,
-        elem.avgrating,
-        elem.clist,
-        elem.imdbid,
-        elem.imdbrating,
-        elem.img,
-        elem.nfid,
-        elem.poster,
-        elem.runtime,
-        elem.synopsis,
-        elem.title,
-        elem.titledate,
-        elem.top250,
-        elem.top250tv,
-        elem.year
-      ];
+  // axios.request(options).then(function (response) {
+  //   console.log(response.data.results);
+  //   let dataArray = response.data.results;
+  //   dataArray.forEach((elem) => {
+  //     queryParams = [
+  //       elem.id,
+  //       elem.avgrating,
+  //       elem.clist,
+  //       elem.imdbid,
+  //       elem.imdbrating,
+  //       elem.img,
+  //       elem.nfid,
+  //       elem.poster,
+  //       elem.runtime,
+  //       elem.synopsis,
+  //       elem.title,
+  //       elem.titledate,
+  //       elem.top250,
+  //       elem.top250tv,
+  //       elem.year
+  //     ];
 
-      db.query(`INSERT INTO movies (unogs_id, avgrating, clist, imdbid, imdbrating, img, nfid, poster, runtime, synopsis, title, titledate, top250, top250tv, year) VALUES (
-        $1,
-        $2,
-        $3,
-        $4,
-        $5,
-        $6,
-        $7,
-        $8,
-        $9,
-        $10,
-        $11,
-        $12,
-        $13,
-        $14,
-        $15
-      ) ON CONFLICT DO NOTHING;`, queryParams)
-    });
-  }).catch(function (error) {
-    console.error(error);
-  });
+  //     db.query(`INSERT INTO movies (unogs_id, avgrating, clist, imdbid, imdbrating, img, nfid, poster, runtime, synopsis, title, titledate, top250, top250tv, year) VALUES (
+  //       $1,
+  //       $2,
+  //       $3,
+  //       $4,
+  //       $5,
+  //       $6,
+  //       $7,
+  //       $8,
+  //       $9,
+  //       $10,
+  //       $11,
+  //       $12,
+  //       $13,
+  //       $14,
+  //       $15
+  //     ) ON CONFLICT DO NOTHING;`, queryParams)
+  //   });
+  // }).catch(function (error) {
+  //   console.error(error);
+  // });
   res.render("index");
 });
 
