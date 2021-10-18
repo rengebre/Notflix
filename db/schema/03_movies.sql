@@ -3,7 +3,6 @@ CREATE TABLE movies (
   id SERIAL PRIMARY KEY NOT NULL,
   unogs_id INTEGER UNIQUE NOT NULL,
   avgrating REAL,
-  clist TEXT,
   imdbid VARCHAR(50),
   imdbrating REAL,
   img TEXT,
