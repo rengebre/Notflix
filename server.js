@@ -1,4 +1,4 @@
-const unogs = require("./routes/unogs");
+const unogs = require("./routes/db_populate_unogs");
 
 // load .env data into process.env
 require("dotenv").config();

@@ -3,8 +3,8 @@ const router  = express.Router();
 
 module.exports = (db) => {
   // /sessions/id -> POST: Form data after creating a session
-  router.post('/:id', (req, res) => {
-
+  router.post('/', (req, res) => {
+    console.log(req.body);
   });
 
   // /sessions/ -> GET: get the sessions page

@@ -76,7 +76,7 @@ const fetchUnogsTotal = function(db, dataType) {
     console.log(totalObjects, Math.ceil(totalObjects / 100) - 1);
     populateTableWithUnogsData(response.data.results, dataType, db);
     // console.log(Math.ceil(totalObjects / 100) - 1);
-    for (let i = 37; i < Math.ceil(totalObjects / 100); i++) {
+    for (let i = 1; i < Math.ceil(totalObjects / 100); i++) {
       fetchUnogsData(db, i * 100, dataType);
     }
   }).catch(function (error) {
