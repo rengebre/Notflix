@@ -73,9 +73,10 @@ const fetchUnogsTotal = function(db, dataType) {
   // Fetch Unogs API data
   axios.request(options).then(function (response) {
     const totalObjects = response.data.total; // -> 3962 /100 -> 39.62 -> 40 - 1 -> 39.
+    console.log(totalObjects, Math.ceil(totalObjects / 100) - 1);
     populateTableWithUnogsData(response.data.results, dataType, db);
     // console.log(Math.ceil(totalObjects / 100) - 1);
-    for (let i = 1; i < Math.ceil(totalObjects / 100) - 1; i++) {
+    for (let i = 37; i < Math.ceil(totalObjects / 100); i++) {
       fetchUnogsData(db, i * 100, dataType);
     }
   }).catch(function (error) {
@@ -115,6 +116,32 @@ const fetchUnogsData = function(db, offset, dataType) {
   });
 }
 
+// Fetch the genre data from unogs
+const fetchUnogsGenreData = function(db, res) {
+  var options = {
+    method: 'GET',
+    url: 'https://unogsng.p.rapidapi.com/genres',
+    headers: {
+      'x-rapidapi-host': 'unogsng.p.rapidapi.com',
+      'x-rapidapi-key': 'e1fc630612mshfbb9f1157b1ac23p18604bjsn496c7e689a0e'
+    }
+  };
+
+  axios.request(options).then(function (response) {
+    response.data.results.forEach((elem) => {
+      const queryParams = [elem.genre, elem.netflixid];
+      // console.log(response.data);
+      db.query(`
+      INSERT INTO genres (genre, netflixid) VALUES ($1, $2) ON CONFLICT DO NOTHING`, queryParams)
+    });
+  }).then(() => {
+    res.status(200).send("Uploaded API data");
+  }).catch(function (error) {
+    console.error(error);
+  });
+}
+
 module.exports = {
-  fetchUnogsTotal
+  fetchUnogsTotal,
+  fetchUnogsGenreData
 }

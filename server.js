@@ -39,11 +39,14 @@ app.use(express.static("public"));
 // Note: Feel free to replace the example routes below with your own
 const usersRoutes = require("./routes/users");
 const widgetsRoutes = require("./routes/widgets");
+const sessionRoutes = require("./routes/sessions");
+// const { getSessions, postSessions } = require("./routes/sessions");
 
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
-app.use("/api/users", usersRoutes(db));
-app.use("/api/widgets", widgetsRoutes(db));
+app.use("/users", usersRoutes(db));
+app.use("/api/", widgetsRoutes(db));
+app.use("/sessions/", sessionRoutes(db));
 // Note: mount other resources here, using the same pattern above
 
 // Home page
@@ -57,8 +60,9 @@ app.get("/", (req, res) => {
 
 // Populate our DB from the unogs API.
 app.get("/test", (req, res) => {
-  unogs.fetchUnogsTotal(db, 'movie');
-  res.status(200).send("Uploaded API data");
+  // unogs.fetchUnogsTotal(db, 'movie');
+  // unogs.fetchUnogsGenreData(db, res);
+  res.status(200).send("No data to retrieve");
 });
 
 app.listen(PORT, () => {
