@@ -35,9 +35,6 @@ module.exports = (db) => {
           );
         })
     }
-
-
-    // console.log(reqBody);
     res.send("form submitted");
   });
 
