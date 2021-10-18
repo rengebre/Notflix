@@ -2,6 +2,10 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (db) => {
+  router.get("/test", (req, res) => {
+    res.render("sessions");
+  });
+
   // /sessions/id -> POST: Form data after creating a session
   router.post('/', (req, res) => {
     const reqBody = req.body;
