@@ -54,8 +54,8 @@
     <form action="" method="POST" id="filter-form">
       <p>Filters:</p>
       <label for="show-type">Type of shows: <br>
-        <input type="radio" name="type-movie" value="movies" class="radio-movie"><label for="type-movie">Movies</label>
-        <input type="radio" name="type-series" value="series" class="radio-series"><label for="type-series">Series</label>
+        <input type="radio" name="type-show" value="movies" class="radio-movie"><label for="type-movie">Movies</label>
+        <input type="radio" name="type-show" value="series" class="radio-series"><label for="type-series">Series</label>
       </label><br>
       <label for="genres">Categories: <br>
         <input type="checkbox" class="drama-checkbox" name="drama-checkbox" value="drama"><label for="drama-checkbox">Drama</label>
@@ -68,10 +68,10 @@
         <input type="checkbox" class="sci-fi-checkbox" name="sci-fi-checkbox" value="sci-fi"><label for="sci-fi-checkbox">Sci-Fi</label>
       </label> <br>
       <label for="num-options">Number of options:
-        <input type="number" name="num-options" class="num-options">
+        <input type="number" name="num-options" min="2" class="num-options">
       </label> <br>
       <label for="num-participants">Number of participants:
-        <input type="number" name="num-participants" class="num-participants">
+        <input type="number" name="num-participants" min="2" class="num-participants">
       </label> <br>
       <label for="location">Location:
         <input type="text" name="location" class="location">
