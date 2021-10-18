@@ -9,13 +9,11 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (db) => {
-  router.get("/", (req, res) => {
-    let query = `SELECT * FROM widgets`;
-    console.log(query);
-    db.query(query)
-      .then(data => {
-        const widgets = data.rows;
-        res.json({ widgets });
+  // movie-search endpoint ("/api/movie-search")
+  router.get("/movie-search", (req, res) => {
+    db.query(`SELECT * FROM movies WHERE id < 20;`)
+      .then(movie => {
+        res.json(movie.rows);
       })
       .catch(err => {
         res
@@ -23,5 +21,11 @@ module.exports = (db) => {
           .json({ error: err.message });
       });
   });
+
+  // genre-search endpoint ("/api/genre-search")
+  router.get("/genre-search", (req, res) => {
+    // db.query(``)
+  })
+
   return router;
 };
