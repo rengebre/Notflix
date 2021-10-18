@@ -122,8 +122,8 @@ const fetchUnogsGenreData = function(db, res) {
     method: 'GET',
     url: 'https://unogsng.p.rapidapi.com/genres',
     headers: {
-      'x-rapidapi-host': 'unogsng.p.rapidapi.com',
-      'x-rapidapi-key': 'e1fc630612mshfbb9f1157b1ac23p18604bjsn496c7e689a0e'
+      'x-rapidapi-host': process.env.API_HOST_UNOGSNG,
+      'x-rapidapi-key': process.env.API_KEY_UNOGSNG
     }
   };
 
