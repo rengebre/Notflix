@@ -49,7 +49,6 @@ const fetchUnogsTotal = function(db, dataType) {
   // options.params.type = dataType;
   // options.params.offset = '0';
 
-
   //Unogs API fetch parameters
   const options = {
     method: 'GET',

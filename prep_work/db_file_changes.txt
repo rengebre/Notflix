@@ -1,0 +1,3 @@
+UPDATE genres SET genre='Comedies' WHERE netflixid=6548;
+UPDATE genres SET genre='Romantic Films' WHERE netflixid=8883;
+UPDATE genres SET genre='Thrillers' WHERE netflixid=8933;
