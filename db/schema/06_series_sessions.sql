@@ -2,5 +2,6 @@ DROP TABLE IF EXISTS series_sessions CASCADE;
 CREATE TABLE series_sessions (
   id SERIAL PRIMARY KEY NOT NULL,
   movies_id INTEGER REFERENCES movies(id) ON DELETE CASCADE,
-  session_id INTEGER REFERENCES sessions(id) ON DELETE CASCADE
+  session_id INTEGER REFERENCES sessions(id) ON DELETE CASCADE,
+  likes INTEGER DEFAULT 0
 );

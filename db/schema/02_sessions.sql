@@ -4,5 +4,8 @@ CREATE TABLE sessions (
   code VARCHAR(6) NOT NULL,
   votes_needed INTEGER NOT NULL,
   votes_computed INTEGER DEFAULT 0,
-  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+  participants INTEGER NOT NULL,
+  session_size INTEGER NOT NULL,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  active BOOLEAN DEFAULT TRUE
 );
