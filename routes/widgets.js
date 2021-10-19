@@ -10,8 +10,8 @@ const router  = express.Router();
 
 module.exports = (db) => {
   // movie-search endpoint ("/api/movie-search")
-  router.post("/movie-search", (req, res) => {
-    // console.log(req.body);
+  router.get("/movie-search", (req, res) => {
+
 
     db.query(`SELECT title FROM movies;`)
       .then(result => {
