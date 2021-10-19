@@ -25,16 +25,16 @@ module.exports = (db) => {
     })
     .then((sessionId) => {
       let counter = poolSize;
+
       while (counter) {
         counter --;
+
         const movieId = helperFunctions.getRandomMovieId();
-        db.query(`SELECT * FROM movies WHERE id=${movieId};`)
-          .then(data => {
-            db.query(
-              `INSERT INTO movie_sessions(movies_id, session_id)
-              VALUES ('${movieId}', '${sessionId}');`
-              );
-          })
+
+        db.query(
+          `INSERT INTO movie_sessions(movies_id, session_id)
+          VALUES ('${movieId}', '${sessionId}');`
+          );
       }
     })
     res.send("form submitted");
