@@ -5,7 +5,11 @@ const helperFunctions = require("./helper_functions");
 
 module.exports = (db) => {
   router.get("/test", (req, res) => {
-    res.render("sessions");
+    templateVars = {
+      session_size: 26
+    };
+
+    res.render("sessions", templateVars);
   });
 
   // /sessions/ -> GET (AJAX) get the next image

@@ -125,7 +125,7 @@ $(document).ready(function() {
 
 
     $posterCount.text(++posterCountVal);
-
+     console.log(testData.length);
 
 
     // console.log(data);
