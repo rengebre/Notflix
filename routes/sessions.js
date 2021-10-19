@@ -1,6 +1,8 @@
 const express = require('express');
 const router  = express.Router();
 
+const helperFunctions = require("./helper_functions");
+
 module.exports = (db) => {
   router.get("/test", (req, res) => {
     res.render("sessions");
@@ -13,14 +15,55 @@ module.exports = (db) => {
     })
   });
 
-  // /sessions/id -> POST: Form data after creating a session
+  // /sessions/ -> POST: Form data after creating a session
   router.post('/', (req, res) => {
+
     const reqBody = req.body;
-    if (!reqBody["num-options"]) {
-      console.log('test');
-    }
-    console.log(req.body);
+
+    const poolSize = Number(reqBody['num-options']);
+    const participants = Number(reqBody['num-participants']);
+
+    const votesNeeded = poolSize * participants;
+
+    const code = helperFunctions.generateRandomString();
+
+    db.query(`INSERT INTO sessions (code, votes_needed) VALUES ('${code}', '${votesNeeded}') RETURNING sessions.id;`)
+    .then((data) => {
+     const currentSessionId = data.rows[0].id;
+     return currentSessionId;
+    })
+    .then((sessionId) => {
+
+    })
+
+    // const currentSessionId = db.query(`SELECT id FROM sessions WHERE code='${code}';`);
+
+    // let counter = poolSize;
+    // while (counter) {
+    //   counter --;
+
+    //   const movieId = helperFunctions.getRandomMovieId();
+    //   console.log(movieId, typeof movieId);
+
+    //   db.query(`SELECT * FROM movies WHERE id=${movieId};`)
+    //     .then(data => {
+    //       console.log("data.rows", data.rows);
+    //       console.log(typeof currentSessionId);
+    //       // db.query(
+    //       //   `INSERT INTO movie_sessions(movies_id, session_id)
+    //       //   VALUES ('${movieId}', '${currentSessionId}');`
+    //       // );
+    //     })
+    // }
     res.send("form submitted");
+  });
+
+  // /sessions/movies -> GET: load movies for autocomplete
+  router.get('/movies', (req, res) => {
+    db.query(`SELECT title FROM movies;`)
+      .then(result => {
+        res.json(result.rows);
+      });
   });
 
   // /sessions/ -> GET: get the sessions page
