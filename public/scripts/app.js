@@ -19,26 +19,35 @@ $(document).ready(function() {
 
   let loadedMovies = [];
   $('#movie-input').on("keyup", () => {
-    const inputData = $('#movie-input').val().toLowerCase();
-    $.get('/api/movie-search', { inputData }, (data) => {
+    // const inputData = $('#movie-input').val().toLowerCase();
+    const inputData = $('#movie-input').val();
+    // $.get('/api/movie-search', { inputData }, (data) => {
 
-      loadedMovies = data.map(movie => movie.title)
+    //   loadedMovies = data.map(movie => movie.title)
 
-    })
+    // })
+    // console.log(inputData);
 
-    for (let movie of loadedMovies) {
+    $.ajax({
+      url: '/api/movie-search',
+      method: 'GET',
+      data: inputData
+    }).then((result) => {
+      console.log(result);
+    });
 
-      if (movie.toLowerCase().includes(inputData)) {
-        console.log(movie)
-        let suggestions = document.getElementById("suggestions");
-        let movieSuggestion = document.createElement("option");
-        movieSuggestion.value = movie;
-        suggestions.appendChild(movieSuggestion);
-        // console.log("suggestions", suggestions)
-        // console.log("moviesuggestion", movieSuggestion)
-      }
-    }
+  //   for (let movie of loadedMovies) {
+
+  //     if (movie.toLowerCase().includes(inputData)) {
+  //       console.log(movie)
+  //       let suggestions = document.getElementById("suggestions");
+  //       let movieSuggestion = document.createElement("option");
+  //       movieSuggestion.value = movie;
+  //       suggestions.appendChild(movieSuggestion);
+  //       // console.log("suggestions", suggestions)
+  //       // console.log("moviesuggestion", movieSuggestion)
+  //     }
+  //   }
 
   })
-
 });
