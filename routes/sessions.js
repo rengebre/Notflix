@@ -5,8 +5,13 @@ const helperFunctions = require("./helper_functions");
 
 module.exports = (db) => {
   router.get("/test", (req, res) => {
+    // Hard code poster/session info in right now, fix this later once we have sessions working in the db
     templateVars = {
-      session_size: 26
+      session_size: 26,
+      initial_poster:{
+        poster: "https://images-na.ssl-images-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
+        img: "https://occ-0-2851-38.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABaqOk9gIL2AhavJ5YauNUyT_jgDiyV5l9nYWEnWSYArhgsxQod55rZQ4IXV4mZzWXOq6PEKVfVSNZ7FpdTsTFsnPuQ.jpg?r=7d5"
+      }
     };
 
     res.render("sessions", templateVars);

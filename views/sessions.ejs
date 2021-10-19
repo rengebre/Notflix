@@ -44,7 +44,11 @@
      <div id="session-total">/<%= session_size %></div>
    </div>
   <div id="movie-poster">
-    <img src="https://images-na.ssl-images-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg" alt="Movie Poster">
+    <% if (!initial_poster.poster || initial_poster.poster === 'N/A') { %>
+      <img src="<%= initial_poster.img %>" alt="Movie Poster">
+    <% } else { %>
+      <img src="<%= initial_poster.poster %>" alt="Movie Poster">
+    <% } %>
   </div>
   <div class="poster-options">
     <button class="x"><i class="fas fa-times fa-2x"></i></button>

@@ -1,7 +1,7 @@
 const testData = [
   {
-    poster: null,
-    img: 'https://occ-0-4039-1500.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABdC_8Uc_0DTe2qJWjlftnO9jwm1Yf6t-KbDXrxU1kaL17JqYow8YWLfiQW5OmTMSfTn3aE3iVlv4SCXfM58RCebF4A.jpg?r=1e0'
+    poster: "https://images-na.ssl-images-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
+    img: "https://occ-0-2851-38.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABaqOk9gIL2AhavJ5YauNUyT_jgDiyV5l9nYWEnWSYArhgsxQod55rZQ4IXV4mZzWXOq6PEKVfVSNZ7FpdTsTFsnPuQ.jpg?r=7d5"
   },
   {
     poster: 'https://m.media-amazon.com/images/M/MV5BMjI5ZmJlNTAtYjJlNy00Y2M1LWE4NWItZTFjZjg0MTAzMDAwXkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_SX300.jpg',
@@ -111,7 +111,6 @@ $(document).ready(function() {
     const $moviePosterDiv = $('#movie-poster');
     const $posterCount = $('#session-count');
     let posterCountVal = Number($posterCount.text());
-    console.log(posterCountVal, typeof posterCountVal);
 
     $('#movie-poster img').remove();
 
@@ -125,7 +124,7 @@ $(document).ready(function() {
 
 
     $posterCount.text(++posterCountVal);
-     console.log(testData.length);
+
 
 
     // console.log(data);
