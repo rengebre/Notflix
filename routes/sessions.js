@@ -4,6 +4,17 @@ const router  = express.Router();
 const helperFunctions = require("./helper_functions");
 
 module.exports = (db) => {
+  router.get("/test", (req, res) => {
+    res.render("sessions");
+  });
+
+  // /sessions/ -> GET (AJAX) get the next image
+  router.get('/next', (req, res) => {
+    db.query(`SELECT poster, img FROM movies WHERE title LIKE '%ama%';`).then((data) => {
+      console.log(data.rows);
+    })
+  });
+
   // /sessions/id -> POST: Form data after creating a session
   router.post('/', (req, res) => {
 
@@ -51,8 +62,6 @@ module.exports = (db) => {
     res.status(200).send("we're routed");
   });
 
-  // /sessions/ -> GET (AJAX) get the next image
-  // router.get('')
 
   return router;
 };
