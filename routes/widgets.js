@@ -10,7 +10,8 @@ const router  = express.Router();
 
 module.exports = (db) => {
   // movie-search endpoint ("/api/movie-search")
-  router.get("/movie-search", (req, res) => {
+  router.post("/movie-search", (req, res) => {
+
     db.query(`SELECT * FROM movies WHERE name LIKE;`)
       .then(movie => {
         res.json(movie.rows);

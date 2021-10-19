@@ -4,7 +4,7 @@ section.session-poster-display {
   padding-left: 2em;
   padding-right: 2em;
   padding-top: 2em;
-  background-color: grey;
+  background-color: rgb(53, 53, 53);
   border-radius: 1em;
 
 
@@ -13,15 +13,55 @@ section.session-poster-display {
     flex-direction: row;
     justify-content: space-around;
     width: 100%;
-    background-color: rgb(16, 119, 236);
+    background-color: rgb(53, 53, 53);
     padding: 1em 0em;
   }
 
-  i.fa-times-circle {
-    color: red;
+  button.x {
+    background-color: rgb(177, 5, 5);
+    border: none;
+    color: rgb(53, 53, 53);
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 50%;
+    animation-name: arrow-up-motion;
+    animation-duration: 1s;
+    animation-iteration-count: 3;
   }
 
-  i.fa-check-circle {
-    color: green;
+  button.x:hover {
+    color: rgb(177, 5, 5);
+    background-color: white;
+    box-shadow: 2px 2px black;
+    transition: 0.4s;
+  }
+
+  button.check {
+    background-color: rgb(2, 98, 2);
+    border: none;
+    color: rgb(53, 53, 53);
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 50%;
+    animation-name: arrow-up-motion;
+    animation-duration: 1s;
+    animation-iteration-count: 3;
+  }
+
+  button.check:hover {
+    color: rgb(177, 5, 5);
+    background-color: white;
+    box-shadow: 2px 2px black;
+    transition: 0.4s;
   }
 }
