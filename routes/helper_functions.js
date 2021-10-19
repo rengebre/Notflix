@@ -13,7 +13,13 @@ const getRandomMovieId = function() {
   return Math.floor(Math.random() * (3926 - 1) + 1);
 };
 
+const decoder = function(string) {
+  string = string.replace("&#39;", "'");
+  return string;
+}
+
 module.exports = {
   generateRandomString,
-  getRandomMovieId
+  getRandomMovieId,
+  decoder
 }

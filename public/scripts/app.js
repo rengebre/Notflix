@@ -1,5 +1,12 @@
 // Client facing scripts here
 
+// const helperFunctions = require("../../routes/helper_functions");
+
+const decoder = function(string) {
+  string = string.replace("&#39;", "'");
+  return string;
+}
+
 $(document).ready(function() {
   $(".forms-container").hide();
 
@@ -19,35 +26,26 @@ $(document).ready(function() {
 
   let loadedMovies = [];
   $('#movie-input').on("keyup", () => {
-    // const inputData = $('#movie-input').val().toLowerCase();
     const inputData = $('#movie-input').val();
-    // $.get('/api/movie-search', { inputData }, (data) => {
-
-    //   loadedMovies = data.map(movie => movie.title)
-
-    // })
-    // console.log(inputData);
 
     $.ajax({
       url: '/api/movie-search',
       method: 'GET',
       data: inputData
     }).then((result) => {
-      console.log(result);
-    });
+      return loadedMovies = result.map(movie => movie.title);
 
-  //   for (let movie of loadedMovies) {
+    }).then((moviesArray) => {
+      return moviesArray = moviesArray.map(movie => decoder(movie));
 
-  //     if (movie.toLowerCase().includes(inputData)) {
-  //       console.log(movie)
-  //       let suggestions = document.getElementById("suggestions");
-  //       let movieSuggestion = document.createElement("option");
-  //       movieSuggestion.value = movie;
-  //       suggestions.appendChild(movieSuggestion);
-  //       // console.log("suggestions", suggestions)
-  //       // console.log("moviesuggestion", movieSuggestion)
-  //     }
-  //   }
+    }).then((res) => {
+      for (let movie of res) {
+        let suggestions = document.getElementById("suggestions");
+        let movieSuggestion = document.createElement("option");
+        movieSuggestion.value = movie;
+        suggestions.appendChild(movieSuggestion);
 
+      }
+    })
   })
 });
