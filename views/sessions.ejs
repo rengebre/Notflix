@@ -36,6 +36,7 @@
     <!-- <div class="right-side-content">
       <button type="button">Login</button>
     </div> -->
+    <div><%= code %></div>
   </nav>
 
  <section class="session-poster-display">
@@ -44,10 +45,10 @@
      <div id="session-total">/<%= session_size %></div>
    </div>
   <div id="movie-poster">
-    <% if (!initial_poster.poster || initial_poster.poster === 'N/A') { %>
-      <img src="<%= initial_poster.img %>" alt="Movie Poster">
+    <% if (!poster || poster === 'N/A') { %>
+      <img src="<%= img %>" alt="Movie Poster">
     <% } else { %>
-      <img src="<%= initial_poster.poster %>" alt="Movie Poster">
+      <img src="<%= poster %>" alt="Movie Poster">
     <% } %>
   </div>
   <div class="poster-options">

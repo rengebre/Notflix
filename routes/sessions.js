@@ -4,25 +4,6 @@ const router  = express.Router();
 const helperFunctions = require("./helper_functions");
 
 module.exports = (db) => {
-  router.get("/test", (req, res) => {
-    // Hard code poster/session info in right now, fix this later once we have sessions working in the db
-    templateVars = {
-      session_size: 26,
-      initial_poster:{
-        poster: "https://images-na.ssl-images-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
-        img: "https://occ-0-2851-38.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABaqOk9gIL2AhavJ5YauNUyT_jgDiyV5l9nYWEnWSYArhgsxQod55rZQ4IXV4mZzWXOq6PEKVfVSNZ7FpdTsTFsnPuQ.jpg?r=7d5"
-      }
-    };
-
-    res.render("sessions", templateVars);
-  });
-
-  // /sessions/ -> GET (AJAX) get the next image
-  router.get('/next', (req, res) => {
-    db.query(`SELECT poster, img FROM movies WHERE title LIKE '%ama%';`).then((data) => {
-      console.log(data.rows);
-    })
-  });
 
   // /sessions/ -> POST: Form data after creating a session
   router.post('/', (req, res) => {
@@ -75,10 +56,38 @@ module.exports = (db) => {
       });
   });
 
-  // /sessions/ -> GET: get the sessions page
-  router.get('/:id', (req, res) => {
-    res.status(200).send("we're routed");
+  // /sessions/next -> GET (AJAX) get the next image
+  router.get('/next', (req, res) => {
+    db.query(`SELECT poster, img FROM movies WHERE title LIKE '%ama%';`).then((data) => {
+      console.log(data.rows);
+    })
   });
+
+  // /sessions/:code -> GET the sessions page associated with the given code
+  router.get("/:code", (req, res) => {
+    db
+      .query(`
+        SELECT sessions.id, sessions.code, session_size, movies.poster, movies.img
+        FROM movie_sessions
+        JOIN sessions ON sessions.id = session_id
+        JOIN movies ON movies.id = movies_id
+        WHERE sessions.code = $1
+        ORDER BY movie_sessions.id
+        LIMIT 1;
+      `, [req.params.code])
+      .then((data) => {
+
+        //Make sure link has a correct session code
+        if (data.rows.length === 0) {
+          res.status(404).send("This session does not exist you fool");
+          return;
+        }
+
+        templateVars = data.rows[0];
+        res.render("sessions", templateVars);
+      })
+  });
+
 
 
   return router;
