@@ -10,16 +10,22 @@ const router  = express.Router();
 
 module.exports = (db) => {
   // movie-search endpoint ("/api/movie-search")
-  router.get("/movie-search", (req, res) => {
-    db.query(`SELECT * FROM movies WHERE name LIKE;`)
-      .then(movie => {
-        res.json(movie.rows);
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
+  router.post("/movie-search", (req, res) => {
+    // console.log(req.body);
+
+    db.query(`SELECT title FROM movies;`)
+      .then(result => {
+        res.json(result.rows);
       });
+    // db.query(`SELECT * FROM movies WHERE name LIKE;`)
+    //   .then(movie => {
+    //     res.json(movie.rows);
+    //   })
+    //   .catch(err => {
+    //     res
+    //       .status(500)
+    //       .json({ error: err.message });
+    //   });
   });
 
   // genre-search endpoint ("/api/genre-search")
