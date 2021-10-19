@@ -105,24 +105,26 @@ const testData = [
   }
 ]
 
-let counter = 0;
 
 $(document).ready(function() {
   $('button.x').on("click", function() {
     const $moviePosterDiv = $('#movie-poster');
+    const $posterCount = $('#session-count');
+    let posterCountVal = Number($posterCount.text());
+    console.log(posterCountVal, typeof posterCountVal);
 
     $('#movie-poster img').remove();
 
-    if (!testData[counter].poster || testData[counter].poster === 'N/A') {
-      const $posterImg = $(`<img src="${testData[counter].img}" alt="Movie Poster"></img>`);
+    if (!testData[posterCountVal].poster || testData[posterCountVal].poster === 'N/A') {
+      const $posterImg = $(`<img src="${testData[posterCountVal].img}" alt="Movie Poster"></img>`);
       $moviePosterDiv.append($posterImg);
     } else {
-      const $posterImg = $(`<img src="${testData[counter].poster}" alt="Movie Poster"></img>`);
+      const $posterImg = $(`<img src="${testData[posterCountVal].poster}" alt="Movie Poster"></img>`);
       $moviePosterDiv.append($posterImg);
     }
 
 
-    counter++;
+    $posterCount.text(++posterCountVal);
 
 
 
