@@ -38,6 +38,14 @@ module.exports = (db) => {
     res.send("form submitted");
   });
 
+  // /sessions/movies -> GET: load movies for autocomplete
+  router.get('/movies', (req, res) => {
+    db.query(`SELECT title FROM movies;`)
+      .then(result => {
+        res.json(result.rows);
+      });
+  });
+
   // /sessions/ -> GET: get the sessions page
   router.get('/:id', (req, res) => {
     res.status(200).send("we're routed");
