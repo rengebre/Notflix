@@ -1,0 +1,27 @@
+section.session-poster-display {
+  display: flex;
+  flex-direction: column;
+  padding-left: 2em;
+  padding-right: 2em;
+  padding-top: 2em;
+  background-color: grey;
+  border-radius: 1em;
+
+
+  div.poster-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    background-color: rgb(16, 119, 236);
+    padding: 1em 0em;
+  }
+
+  i.fa-times-circle {
+    color: red;
+  }
+
+  i.fa-check-circle {
+    color: green;
+  }
+}
