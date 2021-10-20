@@ -36,14 +36,22 @@
     <!-- <div class="right-side-content">
       <button type="button">Login</button>
     </div> -->
-    <p id="test-val">Hello chum</p>
+    <div>Session ID: <a class="session-code" href="/sessions/<%= code %>"><%= code %></a></div>
   </nav>
 
  <section class="session-poster-display">
+   <div class="current-poster">
+     <div id="session-count">1</div>
+     <div id="session-total">/<%= session_size %></div>
+   </div>
   <div id="movie-poster">
-    <!-- "https://images-na.ssl-images-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg" -->
-    <img src="https://images-na.ssl-images-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg" alt="Movie Poster">
+    <% if (!poster || poster === 'N/A') { %>
+      <img src="<%= img %>" alt="Movie Poster">
+    <% } else { %>
+      <img src="<%= poster %>" alt="Movie Poster">
+    <% } %>
   </div>
+  <div id="movie-title"><%= title %></div>
   <div class="poster-options">
     <button class="x"><i class="fas fa-times fa-2x"></i></button>
     <button class="check"><i class="fas fa-check fa-2x"></i></button>
