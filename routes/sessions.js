@@ -40,7 +40,7 @@ module.exports = (db) => {
         }
       })
       .then(() => {
-        res.render("sessions.ejs")
+        res.json({ code });
       })
 
     } else {
@@ -79,9 +79,13 @@ module.exports = (db) => {
                 VALUES ('${movieId}', '${sessionId}');
               `)
             })
-          }
-        })
 
+          }
+
+        })
+        .then(() => {
+          res.json({ code });
+        })
       } else {
         randomPick = poolSize - 1;
 
@@ -115,6 +119,9 @@ module.exports = (db) => {
               VALUES ('${movieId}', '${sessionId}');
             `)
           })
+        })
+        .then(() => {
+          res.json({ code });
         })
       }
     }

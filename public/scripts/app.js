@@ -8,7 +8,9 @@ const decoder = function(string) {
 }
 
 $(document).ready(function() {
+  // Hide elements on page load
   $(".forms-container").hide();
+  $("#go-to-session").hide();
 
   $(".button").on("click", function() {
     $(".button").hide();
@@ -115,11 +117,15 @@ $(document).ready(function() {
     console.log("formdata", formData)
     $.ajax({
       type: 'POST',
-      url: 'http://localhost:8080/sessions',
+      url: '/sessions/',
       data: formData
     })
-    .then((result) => {
-      console.log("result????", result)
+    .then((sessionCode) => {
+      const $startSessionButton = $('#go-to-session');
+      $startSessionButton.attr('action', `/sessions/${sessionCode.code}`);
+
+      $('div.buttons').hide();
+      $startSessionButton.show();
     })
   })
 
