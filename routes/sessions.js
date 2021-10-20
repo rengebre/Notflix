@@ -1,51 +1,132 @@
 const express = require('express');
 const router  = express.Router();
-
 const helperFunctions = require("./helper_functions");
-
 module.exports = (db) => {
 
   // /sessions/ -> POST: Form data after creating a session
   router.post('/', (req, res) => {
-
     const reqBody = req.body;
+    // console.log("aaaaaaaaaa", reqBody['movie-names'])
+
 
     const poolSize = Number(reqBody['num-options']);
     const participants = Number(reqBody['num-participants']);
-
     const votesNeeded = poolSize * participants;
-
     const code = helperFunctions.generateRandomString();
 
-    db.query(`INSERT INTO sessions (code, votes_needed) VALUES ('${code}', '${votesNeeded}') RETURNING sessions.id;`)
-    .then((data) => {
-     const currentSessionId = data.rows[0].id;
-     return currentSessionId;
-    })
-    .then((sessionId) => {
 
-    })
+    let randomPick = 0;
 
-    // const currentSessionId = db.query(`SELECT id FROM sessions WHERE code='${code}';`);
+    if (!reqBody['movie-names']) {
+      randomPick = poolSize;
 
-    // let counter = poolSize;
-    // while (counter) {
-    //   counter --;
+      db.query(`INSERT INTO sessions (code, votes_needed, participants, session_size) VALUES ('${code}', '${votesNeeded}', '${participants}', '${poolSize}') RETURNING sessions.id;`)
+      .then((data) => {
+       const currentSessionId = data.rows[0].id;
+       return currentSessionId;
+      })
+      .then((sessionId) => {
+        let counter = randomPick;
 
-    //   const movieId = helperFunctions.getRandomMovieId();
-    //   console.log(movieId, typeof movieId);
+        while (counter) {
+          counter --;
 
-    //   db.query(`SELECT * FROM movies WHERE id=${movieId};`)
-    //     .then(data => {
-    //       console.log("data.rows", data.rows);
-    //       console.log(typeof currentSessionId);
-    //       // db.query(
-    //       //   `INSERT INTO movie_sessions(movies_id, session_id)
-    //       //   VALUES ('${movieId}', '${currentSessionId}');`
-    //       // );
-    //     })
-    // }
-    res.send("form submitted");
+          const movieId = helperFunctions.getRandomMovieId();
+
+          db.query(
+            `INSERT INTO movie_sessions(movies_id, session_id)
+            VALUES ('${movieId}', '${sessionId}');`
+            );
+        }
+      })
+      .then(() => {
+        res.json({ code });
+      })
+
+    } else {
+      if (Array.isArray(reqBody['movie-names'])) {
+        randomPick = poolSize - reqBody['movie-names'].length;
+
+        db.query(`INSERT INTO sessions (code, votes_needed, participants, session_size) VALUES ('${code}', '${votesNeeded}', '${participants}', '${poolSize}') RETURNING sessions.id;`)
+        .then((data) => {
+         const currentSessionId = data.rows[0].id;
+         return currentSessionId;
+        })
+        .then((sessionId) => {
+          let counter = randomPick;
+
+          while (counter) {
+            counter --;
+            const movieId = helperFunctions.getRandomMovieId();
+
+            db.query(
+              `INSERT INTO movie_sessions(movies_id, session_id)
+              VALUES ('${movieId}', '${sessionId}');`
+              );
+          }
+
+          const movieTitles = reqBody['movie-names']
+
+          for (let movie of movieTitles) {
+            db.query(`SELECT id FROM movies WHERE UPPER(title) like UPPER($1)`, [movie])
+            .then(result => {
+              // console.log("----sdfsdg--------", result.rows[0]['id'])
+              return result.rows[0]['id'];
+            })
+            .then(movieId => {
+              db.query(`
+                INSERT INTO movie_sessions(movies_id, session_id)
+                VALUES ('${movieId}', '${sessionId}');
+              `)
+            })
+
+          }
+
+        })
+        .then(() => {
+          res.json({ code });
+        })
+      } else {
+        randomPick = poolSize - 1;
+
+        db.query(`INSERT INTO sessions (code, votes_needed, participants, session_size) VALUES ('${code}', '${votesNeeded}', '${participants}', '${poolSize}') RETURNING sessions.id;`)
+        .then((data) => {
+         const currentSessionId = data.rows[0].id;
+         return currentSessionId;
+        })
+        .then((sessionId) => {
+          let counter = randomPick;
+
+          while (counter) {
+            counter --;
+            const movieId = helperFunctions.getRandomMovieId();
+
+            db.query(
+              `INSERT INTO movie_sessions(movies_id, session_id)
+              VALUES ('${movieId}', '${sessionId}');`
+              );
+          }
+
+          const movieTitle = reqBody['movie-names']
+          db.query(`SELECT id FROM movies WHERE UPPER(title) like UPPER($1)`, [movieTitle])
+          .then(result => {
+            // console.log("--------------", result.rows[0]['id'])
+            return result.rows[0]['id'];
+          })
+          .then(movieId => {
+            db.query(`
+              INSERT INTO movie_sessions(movies_id, session_id)
+              VALUES ('${movieId}', '${sessionId}');
+            `)
+          })
+        })
+        .then(() => {
+          res.json({ code });
+        })
+      }
+    }
+
+    // res.send("form submitted");
   });
 
   // /sessions/movies -> GET: load movies for autocomplete
