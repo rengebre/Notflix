@@ -1,9 +1,13 @@
+nav div {
+  color: white;
+}
+
 section.session-poster-display {
   display: flex;
   flex-direction: column;
   padding-left: 2em;
   padding-right: 2em;
-  padding-top: 2em;
+  padding-top: 1em;
   background-color: rgb(53, 53, 53);
   border-radius: 1em;
 
@@ -15,6 +19,19 @@ section.session-poster-display {
     width: 100%;
     background-color: rgb(53, 53, 53);
     padding: 1em 0em;
+  }
+
+  div.current-poster {
+    display: flex;
+    flex-direction: row;
+
+    div {
+      color: white;
+    }
+  }
+
+  #movie-title {
+    color: white;
   }
 
   button.x {

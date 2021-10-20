@@ -4,16 +4,6 @@ const router  = express.Router();
 const helperFunctions = require("./helper_functions");
 
 module.exports = (db) => {
-  router.get("/test", (req, res) => {
-    res.render("sessions");
-  });
-
-  // /sessions/ -> GET (AJAX) get the next image
-  router.get('/next', (req, res) => {
-    db.query(`SELECT poster, img FROM movies WHERE title LIKE '%ama%';`).then((data) => {
-      console.log(data.rows);
-    })
-  });
 
   // /sessions/ -> POST: Form data after creating a session
   router.post('/', (req, res) => {
@@ -66,10 +56,92 @@ module.exports = (db) => {
       });
   });
 
-  // /sessions/ -> GET: get the sessions page
-  router.get('/:id', (req, res) => {
-    res.status(200).send("we're routed");
+  // /sessions/next -> GET (AJAX) get the next image
+  router.get('/next', (req, res) => {
+    const { count, code } = req.query;
+
+    db
+      .query(`
+        SELECT poster, img, title
+        FROM movie_sessions
+        JOIN sessions ON sessions.id = session_id
+        JOIN movies ON movies.id = movies_id
+        WHERE sessions.code = $1
+        ORDER BY movie_sessions.id
+        LIMIT $2;
+      `, [code, count])
+      .then((images) => {
+        res.json(images.rows[count - 1])
+      });
   });
+
+  router.post('/update-session-counter', (req, res) => {
+    const { code, title } = req.body;
+    // console.log(title);
+    db
+      .query(`
+      UPDATE sessions
+      SET votes_computed = 1 + (
+        SELECT votes_computed FROM sessions WHERE code=$1
+        )
+      WHERE code=$1
+      RETURNING votes_computed;
+      `, [code])
+      .then((result) => {
+        console.log('votes_computed', result.rows[0]);
+        if (title) {
+          db
+          .query(`
+            UPDATE movie_sessions
+            SET likes = 1 + (
+              SELECT likes FROM movie_sessions
+              JOIN movies ON movies.id = movies_id
+              WHERE title = $1
+              )
+              WHERE movies_id = (SELECT id FROM movies WHERE title = $1)
+              RETURNING likes;
+            `, [title])
+            .then((result) => {
+              console.log('likes', result.rows[0])
+              res.json({ message: 'clicked check'});
+            })
+            .catch((err) => {
+              console.log("error handling update query 2");
+            })
+        } else {
+          res.json({ message: 'clicked x'})
+        }
+      })
+      .catch((err) => {
+        console.log("error handling update query 1");
+      })
+  });
+
+  // /sessions/:code -> GET the sessions page associated with the given code
+  router.get("/:code", (req, res) => {
+    db
+      .query(`
+        SELECT sessions.id, sessions.code, session_size, movies.poster, movies.img, movies.title
+        FROM movie_sessions
+        JOIN sessions ON sessions.id = session_id
+        JOIN movies ON movies.id = movies_id
+        WHERE sessions.code = $1
+        ORDER BY movie_sessions.id
+        LIMIT 1;
+      `, [req.params.code])
+      .then((data) => {
+
+        //Make sure link has a correct session code
+        if (data.rows.length === 0) {
+          res.status(404).send("This session does not exist you fool");
+          return;
+        }
+
+        templateVars = data.rows[0];
+        res.render("sessions", templateVars);
+      })
+  });
+
 
 
   return router;
