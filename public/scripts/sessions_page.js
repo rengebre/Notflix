@@ -64,9 +64,6 @@ $(document).ready(function() {
       method: "POST",
       data: data
     })
-    .then(()=> {
-      console.log('does this matter?');
-    })
     .catch((err) => {
       console.log(err);
     })

@@ -6,8 +6,6 @@ module.exports = (db) => {
   // /sessions/ -> POST: Form data after creating a session
   router.post('/', (req, res) => {
     const reqBody = req.body;
-    // console.log("aaaaaaaaaa", reqBody['movie-names'])
-
 
     const poolSize = Number(reqBody['num-options']);
     const participants = Number(reqBody['num-participants']);
@@ -70,7 +68,6 @@ module.exports = (db) => {
           for (let movie of movieTitles) {
             db.query(`SELECT id FROM movies WHERE UPPER(title) like UPPER($1)`, [movie])
             .then(result => {
-              // console.log("----sdfsdg--------", result.rows[0]['id'])
               return result.rows[0]['id'];
             })
             .then(movieId => {
@@ -158,7 +155,6 @@ module.exports = (db) => {
 
   router.post('/update-session-counter', (req, res) => {
     const { code, title } = req.body;
-    // console.log(title);
     db
       .query(`
       UPDATE sessions
@@ -169,7 +165,6 @@ module.exports = (db) => {
       RETURNING votes_computed;
       `, [code])
       .then((result) => {
-        console.log('votes_computed', result.rows[0]);
         if (title) {
           db
           .query(`
@@ -183,7 +178,6 @@ module.exports = (db) => {
               RETURNING likes;
             `, [title])
             .then((result) => {
-              console.log('likes', result.rows[0])
               res.json({ message: 'clicked check'});
             })
             .catch((err) => {
@@ -222,8 +216,6 @@ module.exports = (db) => {
         res.render("sessions", templateVars);
       })
   });
-
-
 
   return router;
 };
