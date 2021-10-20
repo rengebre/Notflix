@@ -10,17 +10,29 @@ const router  = express.Router();
 
 module.exports = (db) => {
   // movie-search endpoint ("/api/movie-search")
-
   router.get("/movie-search", (req, res) => {
     const searchData = decodeURIComponent(req.url.split('?')[1]);
-    // console.log(searchData);
-    db.query(`SELECT title FROM movies WHERE UPPER(title) LIKE UPPER($1) LIMIT 5`, [`${searchData}%`])
+
+    db.query(`SELECT title FROM movies WHERE UPPER(title) LIKE UPPER($1) LIMIT 7`, [`${searchData}%`])
       .then(result => {
         res.json(result.rows);
 
       });
-
   });
+
+  // search-result endpoint ("/api/search-result")
+  router.post("/search-result", (req, res) => {
+    const movieTitle = req.body["search"];
+
+    db.query(`SELECT title FROM movies WHERE UPPER(title) LIKE UPPER($1)`,[`${movieTitle}`])
+      .then(result => {
+        res.json(result.rows);
+        console.log(result.rows)
+      })
+      .then(res => {
+        // console.log("here?", res)
+      })
+  })
 
   // genre-search endpoint ("/api/genre-search")
   router.get("/genre-search", (req, res) => {

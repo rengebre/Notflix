@@ -24,9 +24,13 @@ $(document).ready(function() {
     $(".description").show();
   });
 
+  // autocomplete on search input
   let loadedMovies = [];
   $('#movie-input').on("keyup", () => {
     const inputData = $('#movie-input').val();
+
+    let suggestions = document.getElementById("suggestions");
+    $("#suggestions").empty()
 
     $.ajax({
       url: '/api/movie-search',
@@ -40,7 +44,6 @@ $(document).ready(function() {
 
     }).then((res) => {
       for (let movie of res) {
-        let suggestions = document.getElementById("suggestions");
         let movieSuggestion = document.createElement("option");
         movieSuggestion.value = movie;
         suggestions.appendChild(movieSuggestion);
@@ -48,4 +51,79 @@ $(document).ready(function() {
       }
     })
   })
-});
+
+
+  //generating DOM structure for selected movie
+  const createMovieElement = function (data) {
+    const trimData = data.replace(/\s+/g, '')
+    const $movie = $(`
+    <div id='${trimData}'>
+    <li class='pre-selected-movies'>${data}
+    <i class="fa-solid fa-ban ${trimData}"></i>
+    </li>
+    </div>
+    `);
+    return $movie;
+  };
+
+  //function to append to the DOM
+  const appendMovie = function(movie) {
+    $("#movies-container").append(createMovieElement(movie))
+  }
+
+  // submit movie from movie search
+  $("#search-form").submit(function(event) {
+    event.preventDefault();
+
+    $.ajax({
+      type: 'POST',
+      url: 'http://localhost:8080/api/search-result',
+      data: $(this).serialize()
+    })
+    .then((res) => {
+      let title = res[0]["title"];
+      $('#movie-input').val("");
+      appendMovie(title)
+
+      // delete from selected
+      const titleWithoutSpaces = title.replace(/\s+/g, '');
+      $(`.${titleWithoutSpaces}`).on("click", () => {
+        $(`#${titleWithoutSpaces}`).empty();
+      })
+    })
+  })
+
+  $("#filter-form").submit(function(event) {
+    event.preventDefault();
+
+    const formData = $(this).serializeArray();
+
+    // let test = Object.values($('.pre-selected-movies'))[0].innerText
+
+    // console.log("test", test)
+
+    let preSelectedMovies = Object.values($('.pre-selected-movies')).forEach((movie, index, array) => {
+      console.log("index", index)
+      if (index < array.length - 2) {
+
+        console.log("index", movie)
+        formData.push({
+          name: "movie-names",
+          value: movie.innerText.trim()
+        })
+
+      }
+    });
+
+    console.log("formdata", formData)
+    $.ajax({
+      type: 'POST',
+      url: 'http://localhost:8080/sessions',
+      data: formData
+    })
+    // .then(res => {
+
+      // console.log("res", res)
+    // })
+  })
+})

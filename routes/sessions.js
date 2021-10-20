@@ -14,31 +14,37 @@ module.exports = (db) => {
   // /sessions/ -> POST: Form data after creating a session
   router.post('/', (req, res) => {
     const reqBody = req.body;
-    const poolSize = Number(reqBody['num-options']);
-    const participants = Number(reqBody['num-participants']);
-    const votesNeeded = poolSize * participants;
-    const code = helperFunctions.generateRandomString();
-    db.query(`INSERT INTO sessions (code, votes_needed, participants, session_size) VALUES ('${code}', '${votesNeeded}', '${participants}', '${poolSize}') RETURNING sessions.id;`)
-    .then((data) => {
-     const currentSessionId = data.rows[0].id;
-     return currentSessionId;
-    })
-    .then((sessionId) => {
-      let counter = poolSize;
+    console.log("aaaaaaaaaa", reqBody)
+    // const poolSize = Number(reqBody['num-options']);
+    // const participants = Number(reqBody['num-participants']);
+    // const votesNeeded = poolSize * participants;
+    // const code = helperFunctions.generateRandomString();
 
-      while (counter) {
-        counter --;
+    // // const preSelectedMovies = document.getElementsByClassName('pre-selected-movies');  //desperate try
+    // // console.log(preSelectedMovies)
 
-        const movieId = helperFunctions.getRandomMovieId();
+    // db.query(`INSERT INTO sessions (code, votes_needed, participants, session_size) VALUES ('${code}', '${votesNeeded}', '${participants}', '${poolSize}') RETURNING sessions.id;`)
+    // .then((data) => {
+    //  const currentSessionId = data.rows[0].id;
+    //  return currentSessionId;
+    // })
+    // .then((sessionId) => {
+    //   let counter = poolSize;
 
-        db.query(
-          `INSERT INTO movie_sessions(movies_id, session_id)
-          VALUES ('${movieId}', '${sessionId}');`
-          );
-      }
-    })
-    res.send("form submitted");
+    //   while (counter) {
+    //     counter --;
+
+    //     const movieId = helperFunctions.getRandomMovieId();
+
+    //     db.query(
+    //       `INSERT INTO movie_sessions(movies_id, session_id)
+    //       VALUES ('${movieId}', '${sessionId}');`
+    //       );
+    //   }
+    // })
+    // res.send("form submitted");
   });
+
   // /sessions/movies -> GET: load movies for autocomplete
   router.get('/movies', (req, res) => {
     db.query(`SELECT title FROM movies;`)
