@@ -49,6 +49,9 @@ module.exports = (db) => {
             );
         }
       })
+      .then(() => {
+        res.render("sessions.ejs")
+      })
 
     } else {
       if (Array.isArray(reqBody['movie-names'])) {
@@ -126,7 +129,7 @@ module.exports = (db) => {
       }
     }
 
-    res.send("form submitted");
+    // res.send("form submitted");
   });
 
   // /sessions/movies -> GET: load movies for autocomplete

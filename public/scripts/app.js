@@ -98,12 +98,12 @@ $(document).ready(function() {
     event.preventDefault();
 
     const formData = $(this).serializeArray();
+    console.log("formdata------------------------", formData)
 
     let preSelectedMovies = Object.values($('.pre-selected-movies')).forEach((movie, index, array) => {
-      console.log("index", index)
+      // console.log("index", index)
       if (index < array.length - 2) {
 
-        console.log("index", movie)
         formData.push({
           name: "movie-names",
           value: movie.innerText.trim()
@@ -118,5 +118,9 @@ $(document).ready(function() {
       url: 'http://localhost:8080/sessions',
       data: formData
     })
+    .then((result) => {
+      console.log("result????", result)
+    })
   })
+
 })
