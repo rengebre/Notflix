@@ -93,14 +93,11 @@ $(document).ready(function() {
     })
   })
 
+  //collect preselected movies and send to backend
   $("#filter-form").submit(function(event) {
     event.preventDefault();
 
     const formData = $(this).serializeArray();
-
-    // let test = Object.values($('.pre-selected-movies'))[0].innerText
-
-    // console.log("test", test)
 
     let preSelectedMovies = Object.values($('.pre-selected-movies')).forEach((movie, index, array) => {
       console.log("index", index)
@@ -121,9 +118,5 @@ $(document).ready(function() {
       url: 'http://localhost:8080/sessions',
       data: formData
     })
-    // .then(res => {
-
-      // console.log("res", res)
-    // })
   })
 })
