@@ -77,17 +77,18 @@ module.exports = (db) => {
 
   router.post('/update-session-counter', (req, res) => {
     const { code, title } = req.body;
-
+    // console.log(title);
     db
       .query(`
       UPDATE sessions
       SET votes_computed = 1 + (
         SELECT votes_computed FROM sessions WHERE code=$1
         )
-      WHERE code=$1;
+      WHERE code=$1
+      RETURNING votes_computed;
       `, [code])
-      .then(() => {
-
+      .then((result) => {
+        console.log('votes_computed', result.rows[0]);
         if (title) {
           db
           .query(`
@@ -98,8 +99,21 @@ module.exports = (db) => {
               WHERE title = $1
               )
               WHERE movies_id = (SELECT id FROM movies WHERE title = $1)
+              RETURNING likes;
             `, [title])
-          }
+            .then((result) => {
+              console.log('likes', result.rows[0])
+              res.json({ message: 'clicked check'});
+            })
+            .catch((err) => {
+              console.log("error handling update query 2");
+            })
+        } else {
+          res.json({ message: 'clicked x'})
+        }
+      })
+      .catch((err) => {
+        console.log("error handling update query 1");
       })
   });
 

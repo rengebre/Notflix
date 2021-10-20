@@ -54,14 +54,20 @@ $(document).ready(function() {
   // update db with user choices on videos
   const updateDBCounts = function($this) {
     const data = { code: $('a.session-code').text() }
+
     if ($this.is($('button.check'))) {
       data.title = convertApostrophe($('#movie-title').text(), 'to');
     }
+
     $.ajax({
       url: '/sessions/update-session-counter',
       method: "POST",
-      data
-    }).catch((err) => {
+      data: data
+    })
+    .then(()=> {
+      console.log('does this matter?');
+    })
+    .catch((err) => {
       console.log(err);
     })
   }
@@ -71,12 +77,14 @@ $(document).ready(function() {
 
   //on x button click get next image
   $('button.x').on("click", function() {
+    console.log("fetch - x");
     fetchNextImage();
     updateDBCounts($(this));
   })
 
     // on check button click, update session counts, movie_session likes
   $('button.check').on("click", function() {
+    console.log("fetch-click")
     fetchNextImage();
     updateDBCounts($(this));
   })
