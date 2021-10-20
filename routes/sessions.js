@@ -58,16 +58,56 @@ module.exports = (db) => {
 
   // /sessions/next -> GET (AJAX) get the next image
   router.get('/next', (req, res) => {
-    db.query(`SELECT poster, img FROM movies WHERE title LIKE '%ama%';`).then((data) => {
-      console.log(data.rows);
-    })
+    const { count, code } = req.query;
+
+    db
+      .query(`
+        SELECT poster, img, title
+        FROM movie_sessions
+        JOIN sessions ON sessions.id = session_id
+        JOIN movies ON movies.id = movies_id
+        WHERE sessions.code = $1
+        ORDER BY movie_sessions.id
+        LIMIT $2;
+      `, [code, count])
+      .then((images) => {
+        res.json(images.rows[count - 1])
+      });
+  });
+
+  router.post('/update-session-counter', (req, res) => {
+    const { code, title } = req.body;
+
+    db
+      .query(`
+      UPDATE sessions
+      SET votes_computed = 1 + (
+        SELECT votes_computed FROM sessions WHERE code=$1
+        )
+      WHERE code=$1;
+      `, [code])
+      .then(() => {
+
+        if (title) {
+          db
+          .query(`
+            UPDATE movie_sessions
+            SET likes = 1 + (
+              SELECT likes FROM movie_sessions
+              JOIN movies ON movies.id = movies_id
+              WHERE title = $1
+              )
+              WHERE movies_id = (SELECT id FROM movies WHERE title = $1)
+            `, [title])
+          }
+      })
   });
 
   // /sessions/:code -> GET the sessions page associated with the given code
   router.get("/:code", (req, res) => {
     db
       .query(`
-        SELECT sessions.id, sessions.code, session_size, movies.poster, movies.img
+        SELECT sessions.id, sessions.code, session_size, movies.poster, movies.img, movies.title
         FROM movie_sessions
         JOIN sessions ON sessions.id = session_id
         JOIN movies ON movies.id = movies_id
