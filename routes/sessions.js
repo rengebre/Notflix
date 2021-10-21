@@ -194,11 +194,9 @@ module.exports = (db) => {
       options.params.genrelist = genreList;
     }
 
-    // console.log(options.params);
+    // Call API twice, once to find the number of items in the list, then again to populate db with movies, create sessions row and create movie_sessions row
 
-    // Call API twice, once to find the number of items in the list, then again to populate with movies
-
-    //Generate random number between 0 & searchTotal - sessionSize
+    //Generate random number between 0 & searchTotal - sessionSize to randomize the search results
     const generateRandomSearchOffset = function(searchTotal, sessionSize) {
       let randLimit = searchTotal - sessionSize;
       console.log('max number', randLimit);
@@ -214,9 +212,7 @@ module.exports = (db) => {
     }
 
     axios.request(options).then((movie) => {
-      // console.log(movie.data)
       const searchTotal = movie.data.total;
-      console.log(typeof searchTotal, searchTotal)
 
       //set the search limit to be max session size
       options.params.limit = String(sessionSize);
@@ -228,12 +224,13 @@ module.exports = (db) => {
         // console.log(response.data.results.length);
         const promiseArray = [];
         const searchListArray = movieList.data.results;
+
         // populate movie data into movies table in db (will not duplicate)
         populateTableWithUnogsData(searchListArray, 'movie', db, promiseArray);
 
         Promise.all(promiseArray).then((returnArray) => {
           console.log('Finished movie table update');
-          // console.log(movieIdArray);
+
           // Create entry in sessions table
           db
             .query(`INSERT INTO sessions (code, votes_needed, participants, session_size) VALUES ('${code}', '${votesNeeded}', '${participants}', '${sessionSize}') RETURNING sessions.id;`)
