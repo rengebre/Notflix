@@ -99,7 +99,7 @@ $(document).ready(function() {
     updateDBCounts($(this));
   })
 
-    // on check button click, update session counts, movie_session likes
+  // on check button click, update session counts, movie_session likes
   $('button.check').on("click", function() {
     fetchNextImage();
     updateDBCounts($(this));
