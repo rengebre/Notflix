@@ -6,8 +6,6 @@ module.exports = (db) => {
   // /sessions/ -> POST: Form data after creating a session
   router.post('/', (req, res) => {
     const reqBody = req.body;
-    // console.log("aaaaaaaaaa", reqBody['movie-names'])
-
 
     const poolSize = Number(reqBody['num-options']);
     const participants = Number(reqBody['num-participants']);
@@ -70,7 +68,6 @@ module.exports = (db) => {
           for (let movie of movieTitles) {
             db.query(`SELECT id FROM movies WHERE UPPER(title) like UPPER($1)`, [movie])
             .then(result => {
-              // console.log("----sdfsdg--------", result.rows[0]['id'])
               return result.rows[0]['id'];
             })
             .then(movieId => {
@@ -142,7 +139,7 @@ module.exports = (db) => {
   // /sessions/next -> GET (AJAX) get the next image
   router.get('/next', (req, res) => {
     const { count, code } = req.query;
-
+    console.log(count, code);
     db
       .query(`
         SELECT poster, img, title
@@ -154,13 +151,16 @@ module.exports = (db) => {
         LIMIT $2;
       `, [code, count])
       .then((images) => {
+        // console.log(images.rows);
+        if (!images.rows[count - 1]) {
+          return res.json({});
+        }
         res.json(images.rows[count - 1])
       });
   });
 
   router.post('/update-session-counter', (req, res) => {
     const { code, title } = req.body;
-    // console.log(title);
     db
       .query(`
       UPDATE sessions
@@ -171,7 +171,6 @@ module.exports = (db) => {
       RETURNING votes_computed;
       `, [code])
       .then((result) => {
-        console.log('votes_computed', result.rows[0]);
         if (title) {
           db
           .query(`
@@ -185,23 +184,35 @@ module.exports = (db) => {
               RETURNING likes;
             `, [title])
             .then((result) => {
-              console.log('likes', result.rows[0])
               res.json({ message: 'clicked check'});
             })
             .catch((err) => {
-              console.log("error handling update query 2");
+              console.log("error handling update query 2:", err);
             })
         } else {
           res.json({ message: 'clicked x'})
         }
       })
       .catch((err) => {
-        console.log("error handling update query 1");
+        console.log("error handling update query 1:", err);
+      })
+  });
+
+  // fetch votes_computed to check against votes_needed, to determine when the session has ended
+  router.get('/:code/fetch-votes', (req, res) => {
+    db
+      .query(`
+      SELECT votes_needed, votes_computed
+      FROM sessions
+      WHERE code=$1;
+      `, [req.params.code])
+      .then((votes) => {
+        res.json(votes.rows[0]);
       })
   });
 
   // /sessions/:code -> GET the sessions page associated with the given code
-  router.get("/:code", (req, res) => {
+  router.get('/:code', (req, res) => {
     db
       .query(`
         SELECT sessions.id, sessions.code, session_size, movies.poster, movies.img, movies.title
@@ -224,7 +235,6 @@ module.exports = (db) => {
         res.render("sessions", templateVars);
       })
   });
-
 
   // sessions/:code/results
   router.get("/:code/results", (req, res) => {
