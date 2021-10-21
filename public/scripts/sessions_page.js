@@ -59,7 +59,6 @@ $(document).ready(function() {
         return;
       }
 
-      // console.log('we are here');
       // if (Object.keys(data).length) {
         changePosterImage(data);
 
@@ -108,16 +107,14 @@ $(document).ready(function() {
 
   // Interval for setting the button for the link to results page
   let resultButtonActionChange = setInterval(() => {
-    // console.log('ajax call');
     sessionCode = $('a.session-code').text();
-    // console.log(sessionCode);
     $.ajax({
       url: `${sessionCode}/fetch-votes`,
       method: 'GET'
     })
     .then((votes) => {
       const { votes_needed, votes_computed } = votes;
-      console.log(votes_needed, votes_computed);
+
       if (votes_computed >= votes_needed) {
 
         $('input.results-button').css('pointer-events', 'auto');
