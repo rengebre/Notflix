@@ -108,6 +108,8 @@ module.exports = (db) => {
           }
 
           const movieTitle = reqBody['movie-names']
+
+
           db.query(`SELECT id FROM movies WHERE UPPER(title) like UPPER($1)`, [movieTitle])
           .then(result => {
             // console.log("--------------", result.rows[0]['id'])
@@ -228,8 +230,6 @@ module.exports = (db) => {
   router.get("/:code/results", (req, res) => {
     const code = req.params['code'];
 
-
-
     db.query(`
     SELECT * FROM movie_sessions
     JOIN sessions ON sessions.id = session_id
@@ -244,9 +244,14 @@ module.exports = (db) => {
     .then((result) => {
       const winnersArray = result.rows;
 
+      console.log("winnersArray", winnersArray)
+
+      for (let movieObj of winnersArray) {
+        movieObj.title = helperFunctions.decoder(movieObj.title)
+      }
+
       const templateVars = { code, winnersArray }
 
-      console.log("templeteVars", templateVars)
       // console.log("----here------", templateVars)
       res.render("results", templateVars);
     })

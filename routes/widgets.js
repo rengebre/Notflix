@@ -22,7 +22,9 @@ module.exports = (db) => {
 
   // search-result endpoint ("/api/search-result")
   router.post("/search-result", (req, res) => {
-    const movieTitle = req.body["search"];
+    let movieTitle = req.body["search"];
+
+    movieTitle = movieTitle.replace("'", "&#39;");
 
     db.query(`SELECT title FROM movies WHERE UPPER(title) LIKE UPPER($1)`,[`${movieTitle}`])
       .then(result => {

@@ -58,6 +58,7 @@ $(document).ready(function() {
   //generating DOM structure for selected movie
   const createMovieElement = function (data) {
     const trimData = data.replace(/\s+/g, '')
+
     const $movie = $(`
     <div id='${trimData}'>
     <li class='pre-selected-movies'>${data}
@@ -65,6 +66,7 @@ $(document).ready(function() {
     </li>
     </div>
     `);
+
     return $movie;
   };
 
@@ -83,9 +85,10 @@ $(document).ready(function() {
       data: $(this).serialize()
     })
     .then((res) => {
+      console.log(res)
       let title = res[0]["title"];
       $('#movie-input').val("");
-      appendMovie(title)
+      appendMovie(title);
 
       // delete from selected
       const titleWithoutSpaces = title.replace(/\s+/g, '');
