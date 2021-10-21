@@ -178,11 +178,12 @@ module.exports = (db) => {
             SET likes = 1 + (
               SELECT likes FROM movie_sessions
               JOIN movies ON movies.id = movies_id
-              WHERE title = $1
+              JOIN sessions ON sessions.id = session_id
+              WHERE title = $1 AND code = $2
               )
-              WHERE movies_id = (SELECT id FROM movies WHERE title = $1)
-              RETURNING likes;
-            `, [title])
+            WHERE movies_id = (SELECT id FROM movies WHERE title = $1)
+            RETURNING likes;
+          `, [title, code])
             .then((result) => {
               res.json({ message: 'clicked check'});
             })
