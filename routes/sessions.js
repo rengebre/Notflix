@@ -1,10 +1,14 @@
 const express = require('express');
 const router  = express.Router();
 const helperFunctions = require("./helper_functions");
+const axios = require('axios').default;
+const { populateTableWithUnogsData } = require('./db_populate_unogs');
+require("dotenv").config();
+
 module.exports = (db) => {
 
   // /sessions/ -> POST: Form data after creating a session
-  router.post('/', (req, res) => {
+  router.post('/disabled', (req, res) => {
     const reqBody = req.body;
 
     const poolSize = Number(reqBody['num-options']);
@@ -126,6 +130,138 @@ module.exports = (db) => {
     }
 
     // res.send("form submitted");
+  });
+
+  // /sessions/ -> POST: Form data after creating a session
+  router.post('/', (req, res) => {
+    //pull in form data from webpage and populate variables we will need
+    const reqBody = req.body;
+    // console.log(reqBody);
+
+    const sessionSize = Number(reqBody['num-options']);
+    const participants = Number(reqBody['num-participants']);
+    const votesNeeded = sessionSize * participants;
+    const code = helperFunctions.generateRandomString();
+
+    // Generate random orderBy to make movie list randomization better
+    const orderByOptions = [
+      'date',
+      'dateDesc',
+      'rating',
+      'title',
+      'runtime',
+      'filmyear',
+      'filmyearDesc'
+    ]
+
+    let randOptionsIndex = Math.floor((Math.random() * orderByOptions.length));
+
+    const orderBy = orderByOptions[randOptionsIndex];
+
+
+    // Declare default search options for unogs api
+    let options = {
+      method: 'GET',
+      url: 'https://unogsng.p.rapidapi.com/search',
+      params: {
+        type: 'movie',
+        start_year: '1972',
+        orderby: orderBy,
+        audiosubtitle_andor: 'and',
+        limit: '1',
+        subtitle: 'english',
+        countrylist: '33',
+        audio: 'english',
+        country_andorunique: 'or',
+        offset: '0',
+        end_year: String(new Date().getFullYear())
+      },
+      headers: {
+        'x-rapidapi-host': process.env.API_HOST_UNOGSNG,
+        'x-rapidapi-key': process.env.API_KEY_UNOGSNG
+      }
+    };
+
+    // Get genre list from all selections, if the list exists populate
+    if(reqBody.genres) {
+      let genreList;
+      if (Array.isArray(reqBody.genres)) {
+        genreList = reqBody.genres.join(', ');
+      } else {
+        genreList = reqBody.genres;
+      }
+
+      options.params.genrelist = genreList;
+    }
+
+    // console.log(options.params);
+
+    // Call API twice, once to find the number of items in the list, then again to populate with movies
+
+    //Generate random number between 0 & searchTotal - sessionSize
+    const generateRandomSearchOffset = function(searchTotal, sessionSize) {
+      let randLimit = searchTotal - sessionSize;
+      console.log('max number', randLimit);
+      if (randLimit <= 0) {
+        return 0;
+      }
+
+      let offset = Math.floor(Math.random() * (randLimit + 1));
+
+      console.log('offset', offset);
+
+      return offset;
+    }
+
+    axios.request(options).then((movie) => {
+      // console.log(movie.data)
+      const searchTotal = movie.data.total;
+      console.log(typeof searchTotal, searchTotal)
+
+      //set the search limit to be max session size
+      options.params.limit = String(sessionSize);
+
+      //Generate random offset for the search
+      options.params.offset = String(generateRandomSearchOffset(searchTotal, sessionSize));
+
+      axios.request(options).then((movieList) => {
+        // console.log(response.data.results.length);
+        const promiseArray = [];
+        const searchListArray = movieList.data.results;
+        // populate movie data into movies table in db (will not duplicate)
+        populateTableWithUnogsData(searchListArray, 'movie', db, promiseArray);
+
+        Promise.all(promiseArray).then((returnArray) => {
+          console.log('Finished movie table update');
+          // console.log(movieIdArray);
+          // Create entry in sessions table
+          db
+            .query(`INSERT INTO sessions (code, votes_needed, participants, session_size) VALUES ('${code}', '${votesNeeded}', '${participants}', '${sessionSize}') RETURNING sessions.id;`)
+            .then((session_id) => {
+              const currentSession = session_id.rows[0].id;
+              returnArray.forEach((elem) => {
+                const currentMoviesId = elem.rows[0].id;
+                db
+                .query(`INSERT INTO movie_sessions(movies_id, session_id)
+                  VALUES ('${currentMoviesId}', '${currentSession}');`)
+              })
+
+              res.json({ code });
+            })
+
+        }).catch((err) => {
+          console.log(err);
+        });
+      }).catch(function (error) {
+        console.error(error);
+        res.status(500).send("something is wrong with specific search :(");
+      });
+
+    })
+    .catch(function (error) {
+      console.error(error);
+      res.status(500).send("something is wrong with total search :(");
+    });
   });
 
   // /sessions/movies -> GET: load movies for autocomplete
