@@ -254,7 +254,7 @@ module.exports = (db) => {
     .then((result) => {
       const winnersArray = result.rows;
 
-      console.log("winnersArray", winnersArray)
+      // console.log("winnersArray", winnersArray)
 
       for (let movieObj of winnersArray) {
         movieObj.title = helperFunctions.decoder(movieObj.title)

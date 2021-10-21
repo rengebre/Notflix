@@ -85,7 +85,7 @@ $(document).ready(function() {
       data: $(this).serialize()
     })
     .then((res) => {
-      console.log(res)
+      // console.log(res)
       let title = res[0]["title"];
       $('#movie-input').val("");
       appendMovie(title);
