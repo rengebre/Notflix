@@ -44,7 +44,7 @@
     <% for (let movieObj of winnersArray) { %>
       <section id="result-section"><%=movieObj.title %></section>
       <% if (!movieObj.poster || movieObj.poster === 'N/A') { %>
-        <img src="<%= movieOBJ.img %>" alt="Movie Poster">
+        <img src="<%= movieObj.img %>" alt="Movie Poster">
       <% } else { %>
         <img src="<%= movieObj.poster %>" alt="Movie Poster">
       <% } %>
