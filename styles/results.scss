@@ -1,0 +1,19 @@
+h3 {
+  color:white;
+}
+
+.results-container {
+  display: flex;
+  flex-direction: column;
+  color: black;
+  background-color: rgba(255,255,255,0.6);
+  padding: 3em;
+  margin-bottom: 5em;
+  margin-top: 4em;
+}
+
+#result-section {
+  margin-top: 55px;
+  font-weight: bold;
+  font-size: large;
+}

@@ -224,6 +224,39 @@ module.exports = (db) => {
   });
 
 
+  // sessions/:code/results
+  router.get("/:code/results", (req, res) => {
+    const code = req.params['code'];
+
+
+
+    db.query(`
+    SELECT * FROM movie_sessions
+    JOIN sessions ON sessions.id = session_id
+    JOIN movies ON movies.id = movie_sessions.movies_id
+    GROUP BY movie_sessions.id, sessions.id, movies.id
+    HAVING sessions.code = '${code}'
+    AND movie_sessions.likes = (SELECT MAX(movie_sessions.likes)
+    FROM movie_sessions
+    JOIN sessions ON sessions.id = movie_sessions.session_id
+    WHERE sessions.code = '${code}');
+    `)
+    .then((result) => {
+      const winnersArray = result.rows;
+
+      const templateVars = { code, winnersArray }
+
+      console.log("templeteVars", templateVars)
+      // console.log("----here------", templateVars)
+      res.render("results", templateVars);
+    })
+    .catch(err =>
+      console.log(err.message))
+
+
+  })
+
+
 
   return router;
 };
