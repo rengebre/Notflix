@@ -85,7 +85,6 @@ $(document).ready(function() {
       data: $(this).serialize()
     })
     .then((res) => {
-      // console.log(res)
       let title = res[0]["title"];
       $('#movie-input').val("");
       appendMovie(title);
@@ -103,10 +102,8 @@ $(document).ready(function() {
     event.preventDefault();
 
     const formData = $(this).serializeArray();
-    console.log("formdata------------------------", formData)
 
     let preSelectedMovies = Object.values($('.pre-selected-movies')).forEach((movie, index, array) => {
-      // console.log("index", index)
       if (index < array.length - 2) {
 
         formData.push({
@@ -117,7 +114,6 @@ $(document).ready(function() {
       }
     });
 
-    console.log("formdata", formData)
     $.ajax({
       type: 'POST',
       url: '/sessions/',

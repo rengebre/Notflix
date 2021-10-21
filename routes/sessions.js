@@ -138,10 +138,11 @@ module.exports = (db) => {
     const reqBody = req.body;
     // console.log(reqBody);
 
-    const sessionSize = Number(reqBody['num-options']);
+    let sessionSize = Number(reqBody['num-options']);
     const participants = Number(reqBody['num-participants']);
     const votesNeeded = sessionSize * participants;
     const code = helperFunctions.generateRandomString();
+    const selectedMovies = reqBody['movie-names'];
 
     // Generate random orderBy to make movie list randomization better
     const orderByOptions = [
@@ -196,77 +197,96 @@ module.exports = (db) => {
 
     // Call API twice, once to find the number of items in the list, then again to populate db with movies, create sessions row and create movie_sessions row
 
-    //Generate random number between 0 & searchTotal - sessionSize to randomize the search results
-    const generateRandomSearchOffset = function(searchTotal, sessionSize) {
-      let randLimit = searchTotal - sessionSize;
-      console.log('max number', randLimit);
-      if (randLimit <= 0) {
-        return 0;
+    const movieIDLookupPromiseArray = [];
+    if (selectedMovies) {
+      if (Array.isArray(selectedMovies)) {
+        sessionSize -= selectedMovies.length;
+        selectedMovies.forEach((elem) => {
+          const queryParams = [
+            helperFunctions.decoderToDB(elem)
+          ]
+          movieIDLookupPromiseArray
+            .push(db.query(`SELECT id FROM movies WHERE title=$1 ORDER BY CASE WHEN imdbrating IS NULL THEN 1 ELSE 0 END, imdbrating DESC LIMIT 1;`, queryParams));
+        });
+      } else {
+        sessionSize--;
+        const queryParams = [helperFunctions.decoderToDB(selectedMovies)];
+        movieIDLookupPromiseArray
+            .push(db.query(`SELECT id FROM movies WHERE title=$1 ORDER BY CASE WHEN imdbrating IS NULL THEN 1 ELSE 0 END, imdbrating DESC LIMIT 1;`, queryParams));
       }
-
-      let offset = Math.floor(Math.random() * (randLimit + 1));
-
-      console.log('offset', offset);
-
-      return offset;
     }
 
-    axios.request(options).then((movie) => {
-      const searchTotal = movie.data.total;
+    const insertRandomLocationInArray = function(array, insertArray) {
+      let arrayLength = array.length;
+      insertArray.forEach((elem) => {
+        let randomNum = Math.floor(Math.random()*(arrayLength + 1));
+        array.splice(randomNum, 0, elem);
+        arrayLength = array.length;
+      })
 
-      //set the search limit to be max session size
-      options.params.limit = String(sessionSize);
+      return array;
+    };
 
-      //Generate random offset for the search
-      options.params.offset = String(generateRandomSearchOffset(searchTotal, sessionSize));
+    Promise.all(movieIDLookupPromiseArray).then((movieIDPromiseReturnArray) => {
 
-      axios.request(options).then((movieList) => {
-        // console.log(response.data.results.length);
-        const promiseArray = [];
-        const searchListArray = movieList.data.results;
+      axios.request(options).then((movie) => {
+          const searchTotal = movie.data.total;
 
-        // populate movie data into movies table in db (will not duplicate)
-        populateTableWithUnogsData(searchListArray, 'movie', db, promiseArray);
+          //set the search limit to be max session size
+          options.params.limit = String(sessionSize);
 
-        Promise.all(promiseArray).then((returnArray) => {
-          console.log('Finished movie table update');
+          //Generate random offset for the search
+          options.params.offset = String(helperFunctions.generateRandomSearchOffset(searchTotal, sessionSize));
 
-          // Create entry in sessions table
-          db
-            .query(`INSERT INTO sessions (code, votes_needed, participants, session_size) VALUES ('${code}', '${votesNeeded}', '${participants}', '${sessionSize}') RETURNING sessions.id;`)
-            .then((session_id) => {
-              const currentSession = session_id.rows[0].id;
-              returnArray.forEach((elem) => {
-                const currentMoviesId = elem.rows[0].id;
-                db
-                .query(`INSERT INTO movie_sessions(movies_id, session_id)
-                  VALUES ('${currentMoviesId}', '${currentSession}');`)
-              })
+          axios.request(options).then((movieList) => {
+              // console.log(response.data.results.length);
+              const promiseArray = [];
+              const searchListArray = movieList.data.results;
 
-              res.json({ code });
-            })
+              // populate movie data into movies table in db (will not duplicate)
+              populateTableWithUnogsData(searchListArray, 'movie', db, promiseArray);
 
-        }).catch((err) => {
-          console.log(err);
-        });
+              Promise.all(promiseArray).then((returnArray) => {
+                  console.log('Finished movie table update');
+                  returnArray = helperFunctions.insertRandomLocationInArray(returnArray, movieIDPromiseReturnArray);
+
+                  // Create entry in sessions table
+                  db
+                    .query(`INSERT INTO sessions (code, votes_needed, participants, session_size) VALUES ('${code}', '${votesNeeded}', '${participants}', '${sessionSize + movieIDPromiseReturnArray.length}') RETURNING sessions.id;`)
+                    .then((session_id) => {
+                        const currentSession = session_id.rows[0].id;
+                        returnArray.forEach((elem) => {
+                            const currentMoviesId = elem.rows[0].id;
+                            db
+                            .query(`INSERT INTO movie_sessions(movies_id, session_id)
+                              VALUES ('${currentMoviesId}', '${currentSession}');`)
+                          })
+
+                          res.json({ code });
+                        })
+
+                    }).catch((err) => {
+                        console.log(err);
+                      });
       }).catch(function (error) {
-        console.error(error);
-        res.status(500).send("something is wrong with specific search :(");
-      });
+          console.error(error);
+          res.status(500).send("something is wrong with specific search :(");
+        });
 
+      })
+      .catch(function (error) {
+          console.error(error);
+          res.status(500).send("something is wrong with total search :(");
+        });
     })
-    .catch(function (error) {
-      console.error(error);
-      res.status(500).send("something is wrong with total search :(");
-    });
   });
 
   // /sessions/movies -> GET: load movies for autocomplete
   router.get('/movies', (req, res) => {
-    db.query(`SELECT title FROM movies;`)
-      .then(result => {
-        res.json(result.rows);
-      });
+      db.query(`SELECT title FROM movies;`)
+    .then(result => {
+      res.json(result.rows);
+    });
   });
 
   // /sessions/next -> GET (AJAX) get the next image
@@ -311,11 +331,12 @@ module.exports = (db) => {
             SET likes = 1 + (
               SELECT likes FROM movie_sessions
               JOIN movies ON movies.id = movies_id
-              WHERE title = $1
+              JOIN sessions ON sessions.id = session_id
+              WHERE title = $1 AND code = $2
               )
-              WHERE movies_id = (SELECT id FROM movies WHERE title = $1)
-              RETURNING likes;
-            `, [title])
+            WHERE movies_id = (SELECT id FROM movies WHERE title = $1)
+            RETURNING likes;
+            `, [title, code])
             .then((result) => {
               res.json({ message: 'clicked check'});
             })
