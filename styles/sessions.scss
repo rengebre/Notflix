@@ -2,6 +2,13 @@ nav div {
   color: white;
 }
 
+form.results-button {
+  display: flex;
+//   input.results-button {
+//     pointer-events: auto;
+//   }
+}
+
 section.session-poster-display {
   display: flex;
   flex-direction: column;

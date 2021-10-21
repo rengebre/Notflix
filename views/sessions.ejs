@@ -51,14 +51,16 @@
       <img src="<%= poster %>" alt="Movie Poster">
     <% } %>
   </div>
+  <form class="results-button" action="/sessions/<%= code %>/results" method="GET">
+    <input class="results-button" type="submit" value="Waiting for friends...">
+  </form>
   <div id="movie-title"><%= title %></div>
   <div class="poster-options">
     <button class="x"><i class="fas fa-times fa-2x"></i></button>
     <button class="check"><i class="fas fa-check fa-2x"></i></button>
-    <!-- <i class="fas fa-times-circle fa-3x"></i>
-    <i class="fas fa-check-circle fa-3x"></i> -->
   </div>
  </section>
+
 
   <footer>
     <i class="fa-brands fa-github-square fa-lg"></i>
