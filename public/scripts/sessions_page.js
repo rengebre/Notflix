@@ -27,7 +27,7 @@ $(document).ready(function() {
       poster = img;
     }
 
-    const $posterImg = $(`<img src="${poster}" alt="Movie Poster"></img>`);
+    const $posterImg = $(`<img src="${poster}" onerror="this.onerror=null; this.src='https://c.tenor.com/vL3k4DdAPisAAAAM/bob-the-builder-fix-it.gif.jpg'" alt="Movie Poster"></img>`);
 
     // Append the new image object to the poster-div
     $('#movie-poster').append($posterImg);
