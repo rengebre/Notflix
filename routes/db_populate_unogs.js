@@ -17,10 +17,9 @@ const axios = require("axios").default;
 //     'x-rapidapi-key': process.env.API_KEY_UNOGSNG
 //   }
 // }
-let db_index = 0;
+// let db_index = 0;
 
-const populateTableWithUnogsData = function(unogsDataArray, table, db) {
-  console.log("populating...", db_index++);
+const populateTableWithUnogsData = function(unogsDataArray, table, db, promiseArray) {
   table = (table === "movie") ? "movies" : table;
 
   unogsDataArray.forEach((elem) => {
@@ -41,8 +40,21 @@ const populateTableWithUnogsData = function(unogsDataArray, table, db) {
       elem.year
     ];
 
-    db.query(`INSERT INTO ${table} (unogs_id, avgrating, imdbid, imdbrating, img, nfid, poster, runtime, synopsis, title, titledate, top250, top250tv, year) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) ON CONFLICT DO NOTHING;`, queryParams)
-  });
+    if (promiseArray) {
+      promiseArray.push(db.query(`
+      INSERT INTO ${table} (unogs_id, avgrating, imdbid, imdbrating, img, nfid, poster, runtime, synopsis, title, titledate, top250, top250tv, year)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+      ON CONFLICT (unogs_id) DO UPDATE
+        SET unogs_id = EXCLUDED.unogs_id
+      RETURNING id;`, queryParams))
+    } else {
+      db.query(`INSERT INTO ${table} (unogs_id, avgrating, imdbid, imdbrating, img, nfid, poster, runtime, synopsis, title, titledate, top250, top250tv, year)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+      ON CONFLICT (unogs_id) DO UPDATE
+        SET unogs_id = EXCLUDED.unogs_id
+      RETURNING id;`, queryParams)
+    }
+    });
 }
 
 const fetchUnogsTotal = function(db, dataType) {
@@ -142,5 +154,6 @@ const fetchUnogsGenreData = function(db, res) {
 
 module.exports = {
   fetchUnogsTotal,
-  fetchUnogsGenreData
+  fetchUnogsGenreData,
+  populateTableWithUnogsData
 }
