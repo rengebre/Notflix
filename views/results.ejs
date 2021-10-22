@@ -41,15 +41,20 @@
 
   <div class="results-container">
     <h3>Most Voted</h3>
-    <% for (let movieObj of winnersArray) { %>
-      <section id="result-section"><%=movieObj.title %></section>
-      <% if (!movieObj.poster || movieObj.poster === 'N/A') { %>
-        <img src="<%= movieObj.img %>" alt="Movie Poster">
-      <% } else { %>
-        <img src="<%= movieObj.poster %>" alt="Movie Poster">
-      <% } %>
-      <article>Likes: <%=movieObj.likes%></article>
-   <% } %>
+    <div id="grid">
+
+      <% for (let movieObj of winnersArray) { %>
+        <section>
+          <section id="result-section"><%=movieObj.title %></section>
+          <% if (!movieObj.poster || movieObj.poster === 'N/A') { %>
+            <img src="<%= movieObj.img %>" alt="Movie Poster">
+          <% } else { %>
+            <img src="<%= movieObj.poster %>" alt="Movie Poster">
+            <% } %>
+            <article>Likes: <%=movieObj.likes%></article>
+        </section>
+             <% } %>
+    </div>
   </div>
 
 
