@@ -8,7 +8,8 @@ body {
   width: 100%;
   background-color: #000000;
   background-image: url("/images/theater_chairs.jpg");
-  background-size: contain;
+
+  background-size: 100%;
 
   // background: rgb(163, 208, 219);
   // background: linear-gradient(
@@ -55,7 +56,7 @@ body {
     height: 80px;
   }
 
-  p {
+  .description {
     color: white;
     text-align: center;
     margin-right: 200px;
@@ -163,19 +164,59 @@ body {
   .forms-container {
     background-color: rgba(255,255,255,0.7);
     width: 65%;
-    height: 600px;
+    // height: 600px;
+    height: auto;
     padding: 2.5em;
     border-radius: 2em;
+    display: flex;
+    flex-direction: column;
+    margin-top: 6em;
+    margin-bottom: 4em;
 
-    p {
-    font-size: larger;
-    margin-left: -470px; //needs to be fixed
-    margin-top: 43px;
+
+    .form-header {
+      font-family: 'Roboto', sans-serif;
+      margin-bottom: 28px;
     }
-  }
 
-  .fa-ban:hover {
-    color: red;
+    .filter-tag {
+    padding: 0.8em;
+    padding-left: 0.1em;
+    font-size: 18px;
+    margin-top: 25px;
+    margin-bottom: 0px;
+    font-family: 'Roboto', sans-serif;
+    }
+
+    .checkboxes {
+      padding-bottom: 1em;
+    }
+
+    .checkbox {
+      padding-right: 20px;
+    }
+
+    .num-inputs {
+      padding-top: 0.6em;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 5em;
+      padding-right: 4em;
+    }
+
+    .form-button{
+      border-radius: 4px;
+      padding: 0.3em;
+    }
+
+    .fa-ban:hover {
+      color: red;
+    }
+
+
   }
 
 }
