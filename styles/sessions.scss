@@ -20,29 +20,59 @@ section.session-poster-display {
   margin-top: 6em;
   border-radius: 4em;
 
-  div.movie-poster {
+  div.final-gif {
     display: flex;
     align-items: center;
-    width: auto;
+  }
 
-    .image:hover > .overlay {
-      width:100%;
-      height:100%;
-      position:absolute;
-      background-color:#000;
-      opacity:0.5;
-      border-radius:30px;
+  div#movie-poster {
+
+    position: relative;
+    width: 50%;
+    max-width: 300px;
+    width: auto;
+    height: auto;
+
+    * {box-sizing: border-box}
+
+    // /* Container needed to position the overlay. Adjust the width as needed */
+    // #movie-poster {
+    // }
+
+    /* Make the image to responsive */
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* The overlay effect - lays on top of the container and over the image */
+    #poster-overlay {
+      position: absolute;
+      bottom: 0;
+      background: rgb(0, 0, 0);
+      background: rgba(0, 0, 0, 0.85); /* Black see-through */
+      color: #f1f1f1;
+      width: 100%;
+      transition: .5s ease;
+      opacity:0;
+      color: white;
+      font-size: 16px;
+      padding: 20px;
+      text-align: center;
+      height: 100%;
+      padding: 20% 5%;
+    }
+
+  }
+  /* When you mouse over the container, fade in the overlay title */
+  #movie-poster:hover {
+
+    #poster-overlay {
+      opacity: 1;
     }
   }
 
-  div.poster-options {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    width: 100%;
-    background-color: transparent;
-    padding: 1em 0em;
-  }
 
   div.current-poster {
     display: flex;
@@ -58,6 +88,16 @@ section.session-poster-display {
     font-size: 18pt;
   }
 
+  div.poster-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    background-color: transparent;
+    padding: 1em 0em;
+  }
+
   button.x {
     background-color: rgb(177, 5, 5);
     border: none;
@@ -70,9 +110,6 @@ section.session-poster-display {
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 50%;
-    animation-name: arrow-up-motion;
-    animation-duration: 1s;
-    animation-iteration-count: 3;
   }
 
   button.x:hover {
@@ -94,15 +131,33 @@ section.session-poster-display {
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 50%;
-    animation-name: arrow-up-motion;
-    animation-duration: 1s;
-    animation-iteration-count: 3;
   }
 
   button.check:hover {
     color: rgb(2, 98, 2);
     background-color: grey;
     box-shadow: 2px 2px black;
+    transition: 0.4s;
+  }
+
+  button.super {
+    background-color: grey;
+    border: 0.125em solid rgb(71, 213, 248);
+    color: rgb(71, 213, 248);
+    width: 40px;
+    height: 42px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+
+  button.super:hover {
+    color: grey;
+    background-color: rgb(71, 213, 248);
+    box-shadow: 2px 2px rgb(53, 53, 53);
     transition: 0.4s;
   }
 }

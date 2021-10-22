@@ -46,25 +46,22 @@
      <div id="session-count">1</div>
      <div id="session-total">/<%= session_size %></div>
    </div>
-  <!-- <div id="movie-poster">
-    <% if (!poster || poster === 'N/A') { %>
-      <img src="<%= img %>" alt="Movie Poster">
-    <% } else { %>
-      <img src="<%= poster %>" alt="Movie Poster">
-    <% } %>
-  </div> -->
-    <% if (!poster || poster === 'N/A') {
-      poster = img;
-    }%>
-  <div id="movie-poster" style="background-image: url('<%= poster %>');">
-  </div>
+    <div id="movie-poster">
+        <% if (!poster || poster === 'N/A') { %>
+          <img src="<%= img %>" alt="Movie Poster">
+        <% } else { %>
+          <img src="<%= poster %>" alt="Movie Poster">
+        <% } %>
+        <span id="poster-overlay"><b>Synopsis:</b><i> <%= synopsis %></i></span>
+    </div>
   <form class="results-button" action="/sessions/<%= code %>/results" method="GET">
     <input class="results-button" type="submit" value="Waiting for friends...">
   </form>
   <div id="movie-title"><b><%= title %></b></div>
   <div class="poster-options">
-    <button class="x"><i class="fas fa-times fa-2x"></i></button>
-    <button class="check"><i class="fas fa-check fa-2x"></i></button>
+      <button class="x"><i class="fas fa-times fa-2x"></i></button>
+      <button class="super"><i class="fas fa-star fa-lg"></i></button>
+      <button class="check"><i class="fas fa-check fa-2x"></i></button>
   </div>
  </section>
 
