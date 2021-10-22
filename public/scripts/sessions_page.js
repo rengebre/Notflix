@@ -17,20 +17,23 @@ $(document).ready(function() {
 
   // change the poster image on the page.
   const changePosterImage = function(posterObj) {
-    let { poster, img } = posterObj;
+    let { poster, img, synopsis } = posterObj;
 
     //remove existing poster
     $('#movie-poster img').remove();
+    $('#poster-overlay').remove();
 
     // if the poster image link doesn't exist, use the img one (smaller but :shrug:)
     if (!poster || poster === 'N/A') {
       poster = img;
     }
 
-    const $posterImg = $(`<img src="${poster}" alt="Movie Poster"></img>`);
+    const $posterImg = $(`<img src="${poster}" onerror="this.onerror=null; this.src='https://c.tenor.com/vL3k4DdAPisAAAAM/bob-the-builder-fix-it.gif.jpg'" alt="Movie Poster"></img>`);
+    const $posterOverlay = $(`<span id="poster-overlay"><b>Synopsis: </b><i>${synopsis}</i></span>`)
 
     // Append the new image object to the poster-div
     $('#movie-poster').append($posterImg);
+    $('#movie-poster').append($posterOverlay)
   };
 
   // fetch the next image for this session
@@ -51,10 +54,15 @@ $(document).ready(function() {
         const $waitingGIF = $('<iframe src="https://giphy.com/embed/VJBd91kUU5FJtcDUvL" width="480" height="400" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>')
         $waitingGIF.css('pointer-events', 'none');
 
+        const $moviePosterDiv = $('#movie-poster');
+
         $('form.results-button').show();
         $('div.poster-options, div.current-poster, #movie-title').hide();
         $('#movie-poster img').remove();
-        $('#movie-poster').append($waitingGIF);
+        $moviePosterDiv.append($waitingGIF);
+        $('#poster-overlay').remove();
+        $moviePosterDiv.addClass('final-gif');
+        $moviePosterDiv.removeAttr('id');
 
         return;
       }
@@ -78,6 +86,10 @@ $(document).ready(function() {
 
     if ($this.is($('button.check'))) {
       data.title = convertApostrophe($('#movie-title').text(), 'to');
+      data.increase = 1;
+    } else if ($this.is($('button.super'))) {
+      data.title = convertApostrophe($('#movie-title').text(), 'to');
+      data.increase = 2;
     }
 
     $.ajax({
@@ -101,6 +113,12 @@ $(document).ready(function() {
 
   // on check button click, update session counts, movie_session likes
   $('button.check').on("click", function() {
+    fetchNextImage();
+    updateDBCounts($(this));
+  })
+
+  //on super get next image, increase likes by 2
+  $('button.super').on("click", function() {
     fetchNextImage();
     updateDBCounts($(this));
   })
