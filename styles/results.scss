@@ -13,11 +13,13 @@ h3 {
   border-radius: 4em;
 
 
-  #grid {
-    display: grid;
-    grid-template-columns: 350px 350px;
-    grid-column-gap: 60px
-  }
+  //works great for multiples results
+  //not so great if there is only one winner.
+  // #grid {
+  //   display: grid;
+  //   grid-template-columns: 350px 350px;
+  //   grid-column-gap: 60px
+  // }
 }
 
 #result-section {
