@@ -63,6 +63,7 @@ $(document).ready(function() {
         $('#poster-overlay').remove();
         $moviePosterDiv.addClass('final-gif');
         $moviePosterDiv.removeAttr('id');
+        $('section.session-poster-display').css('max-width', '1000px')
 
         return;
       }
