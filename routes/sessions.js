@@ -233,6 +233,7 @@ module.exports = (db) => {
         }
 
         templateVars = data.rows[0];
+        templateVars.title = helperFunctions.decoder(templateVars.title);
         res.render("sessions", templateVars);
       })
   });
