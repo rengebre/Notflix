@@ -30,7 +30,9 @@
 <body>
 
   <nav class="gloabl-nav-bar">
-    <img src="https://fontmeme.com/permalink/211017/3b5e284e89be81e698a425f2e9f192c1.png" alt="netflix-font" border="0">
+    <a href="/">
+      <img src="https://fontmeme.com/permalink/211017/3b5e284e89be81e698a425f2e9f192c1.png" alt="netflix-font">
+    </a>
     <!-- <div class="right-side-content">
       <button type="button">Login</button>
     </div> -->
@@ -41,15 +43,20 @@
 
   <div class="results-container">
     <h3>Most Voted</h3>
-    <% for (let movieObj of winnersArray) { %>
-      <section id="result-section"><%=movieObj.title %></section>
-      <% if (!movieObj.poster || movieObj.poster === 'N/A') { %>
-        <img src="<%= movieObj.img %>" alt="Movie Poster">
-      <% } else { %>
-        <img src="<%= movieObj.poster %>" alt="Movie Poster">
-      <% } %>
-      <article>Likes: <%=movieObj.likes%></article>
-   <% } %>
+    <div id="grid">
+
+      <% for (let movieObj of winnersArray) { %>
+        <section>
+          <section id="result-section"><%=movieObj.title %></section>
+          <% if (!movieObj.poster || movieObj.poster === 'N/A') { %>
+            <img src="<%= movieObj.img %>" alt="Movie Poster">
+          <% } else { %>
+            <img src="<%= movieObj.poster %>" alt="Movie Poster">
+            <% } %>
+            <article>Likes: <%=movieObj.likes%></article>
+        </section>
+             <% } %>
+    </div>
   </div>
 
 

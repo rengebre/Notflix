@@ -170,7 +170,7 @@ module.exports = (db) => {
     console.log(count, code);
     db
       .query(`
-        SELECT poster, img, title
+        SELECT poster, img, title, synopsis
         FROM movie_sessions
         JOIN sessions ON sessions.id = session_id
         JOIN movies ON movies.id = movies_id
@@ -188,7 +188,7 @@ module.exports = (db) => {
   });
 
   router.post('/update-session-counter', (req, res) => {
-    const { code, title } = req.body;
+    const { code, title, increase } = req.body;
     db
       .query(`
       UPDATE sessions
@@ -203,15 +203,15 @@ module.exports = (db) => {
           db
           .query(`
             UPDATE movie_sessions
-            SET likes = 1 + (
+            SET likes = $1 + (
               SELECT likes FROM movie_sessions
               JOIN movies ON movies.id = movies_id
               JOIN sessions ON sessions.id = session_id
-              WHERE title = $1 AND code = $2
+              WHERE title = $2 AND code = $3
               )
-            WHERE movies_id = (SELECT id FROM movies WHERE title = $1)
+            WHERE movies_id = (SELECT id FROM movies WHERE title = $2)
             RETURNING likes;
-            `, [title, code])
+          `, [increase, title, code])
             .then((result) => {
               res.json({ message: 'clicked check'});
             })
@@ -244,7 +244,7 @@ module.exports = (db) => {
   router.get('/:code', (req, res) => {
     db
       .query(`
-        SELECT sessions.id, sessions.code, session_size, movies.poster, movies.img, movies.title
+        SELECT sessions.id, sessions.code, session_size, movies.poster, movies.img, movies.title, movies.synopsis
         FROM movie_sessions
         JOIN sessions ON sessions.id = session_id
         JOIN movies ON movies.id = movies_id

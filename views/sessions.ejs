@@ -6,6 +6,7 @@
 
   <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
   <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/social-icons.css" type="text/css" />
   <link rel="stylesheet" href="/styles/main.css" type="text/css" />
   <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
   <link rel="stylesheet" href="/styles/sessions.css" type="text/css" />
@@ -32,7 +33,9 @@
 <body>
 
   <nav>
-    <img src="https://fontmeme.com/permalink/211017/3b5e284e89be81e698a425f2e9f192c1.png" alt="netflix-font">
+    <a href="/">
+      <img src="https://fontmeme.com/permalink/211017/3b5e284e89be81e698a425f2e9f192c1.png" alt="netflix-font">
+    </a>
     <!-- <div class="right-side-content">
       <button type="button">Login</button>
     </div> -->
@@ -44,30 +47,56 @@
      <div id="session-count">1</div>
      <div id="session-total">/<%= session_size %></div>
    </div>
-  <div id="movie-poster">
-    <% if (!poster || poster === 'N/A') { %>
-      <img src="<%= img %>" alt="Movie Poster">
-    <% } else { %>
-      <img src="<%= poster %>" alt="Movie Poster">
-    <% } %>
-  </div>
+    <div id="movie-poster">
+        <% if (!poster || poster === 'N/A') { %>
+          <img src="<%= img %>" alt="Movie Poster">
+        <% } else { %>
+          <img src="<%= poster %>" alt="Movie Poster">
+        <% } %>
+        <span id="poster-overlay"><b>Synopsis:</b><i> <%= synopsis %></i></span>
+    </div>
   <form class="results-button" action="/sessions/<%= code %>/results" method="GET">
     <input class="results-button" type="submit" value="Waiting for friends...">
   </form>
-  <div id="movie-title"><%= title %></div>
+  <div id="movie-title"><b><%= title %></b></div>
   <div class="poster-options">
-    <button class="x"><i class="fas fa-times fa-2x"></i></button>
-    <button class="check"><i class="fas fa-check fa-2x"></i></button>
+      <button class="x"><i class="fas fa-times fa-2x"></i></button>
+      <button class="super"><i class="fas fa-star fa-lg"></i></button>
+      <button class="check"><i class="fas fa-check fa-2x"></i></button>
   </div>
  </section>
 
 
   <footer>
-    <i class="fa-brands fa-github-square fa-lg"></i>
+    <!-- <i class="fa-brands fa-github-square fa-lg"></i>
     <i class="fa-brands fa-facebook-square fa-lg"></i>
     <i class="fa-brands fa-instagram-square fa-lg"></i>
     <i class="fa-brands fa-twitter-square fa-lg"></i>
-    <i class="fa-brands fa-youtube fa-lg"></i>
+    <i class="fa-brands fa-youtube fa-lg"></i> -->
+    <div class="wrapper">
+      <!-- <div class="icon facebook">
+        <div class="tooltip">Facebook</div>
+        <span><i class="fab fa-facebook-f"></i></span>
+      </div> -->
+      <div class="icon twitter">
+        <div class="tooltip">Twitter</div>
+        <span><i class="fab fa-twitter"></i></span>
+      </div>
+      <div class="icon instagram">
+        <div class="tooltip">Instagram</div>
+        <span><i class="fab fa-instagram"></i></span>
+      </div>
+      <a href="https://github.com/rengebre/Notflix">
+        <div class="icon github">
+          <div class="tooltip">Github</div>
+          <span><i class="fab fa-github"></i></span>
+        </div>
+      </a>
+      <!-- <div class="icon youtube">
+        <div class="tooltip">Youtube</div>
+        <span><i class="fab fa-youtube"></i></span>
+      </div> -->
+    </div>
   </footer>
 
 </body>
