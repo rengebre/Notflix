@@ -122,5 +122,5 @@ $(document).ready(function() {
         return clearInterval(resultButtonActionChange);
       }
     })
-  }, 5000);
+  }, 3000);
 })
