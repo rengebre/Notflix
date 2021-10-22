@@ -1,0 +1,32 @@
+// Add the following list of checkboxes to the session form
+HTML Text = 'Music & Musicals' - value='1701, 13335'
+HTML Text = 'Anime' - value='141, 3063'
+HTML Text = 'Children & Family' - value='783, 51056'
+HTML Text = 'Classics' - value='31574'
+HTML Text = 'Documentaries' - value='6839, 2243108'
+HTML Text = 'Independent' - value='7077'
+HTML Text = 'LGBTQ' - value='5977'
+
+//Original genres that were already present
+HTML Text = 'Drama' - value='5763'
+HTML Text = 'Sci-Fi' - value='108533'
+HTML Text = 'Action' - value='801362'
+HTML Text = 'Comedy' - value='6548'
+HTML Text = 'Horror' - value='8711'
+HTML Text = 'Fantasy' - value='9744'
+HTML Text = 'Romance' - value='8883'
+HTML Text = 'Thriller' - value='8933'
+
+
+
+// The below is just notes, you can ignore them, or double check I entered the right numbers into the value strings above
+
+Music - 1701, Musicals - 13335
+Anime - 141, Anime Feature Films - 3063
+Japanese Films - 10398
+Children & Family Films - 783, Family Features - 51056
+Classic Films - 31574
+Documentaries - 6839, Documentary Films - 2243108
+Independent Films - 7077
+Gay & Lesbian Films - 5977
+
