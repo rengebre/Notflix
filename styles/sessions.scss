@@ -19,6 +19,7 @@ section.session-poster-display {
   margin-bottom: 5em;
   margin-top: 6em;
   border-radius: 4em;
+  max-width: 400px;
 
   div.final-gif {
     display: flex;
@@ -34,10 +35,6 @@ section.session-poster-display {
     height: auto;
 
     * {box-sizing: border-box}
-
-    // /* Container needed to position the overlay. Adjust the width as needed */
-    // #movie-poster {
-    // }
 
     /* Make the image to responsive */
     img {
@@ -86,6 +83,11 @@ section.session-poster-display {
   #movie-title {
     color: black;
     font-size: 18pt;
+  }
+
+  input.results-button {
+    margin-top: 2em;
+
   }
 
   div.poster-options {
