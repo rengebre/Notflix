@@ -82,21 +82,24 @@
         <input type="radio" name="type-show" value="series" class="radio-series"><label for="type-series">Series</label>
       </label><br> -->
       <label class="checkboxes" for="genres">Categories: <br>
-        <input type="checkbox" class="checkbox" name="genres" value="801362"><label class="checkbox" for="genres">Action</label>
-        <input type="checkbox" class="checkbox" name="genres" value="141, 3063"><label class="checkbox" for="genres">Anime</label>
-        <input type="checkbox" class="checkbox" name="genres" value="783, 51056"><label class="checkbox" for="genres">Children & Family</label><br>
-        <input type="checkbox" class="checkbox" name="genres" value="31574"><label class="checkbox" for="genres">Classics</label>
-        <input type="checkbox" class="checkbox" name="genres" value="6548"><label class="checkbox" for="genres">Comedy</label>
-        <input type="checkbox" class="checkbox" name="genres" value="6839, 2243108"><label class="checkbox" for="genres">Documentaries</label>
-        <input type="checkbox" class="checkbox" name="genres" value="5763"><label class="checkbox" for="genres">Drama</label>
-        <input type="checkbox" class="checkbox" name="genres" value="9744"><label class="checkbox" for="genres">Fantasy</label>
-        <input type="checkbox" class="checkbox" name="genres" value="8711"><label class="checkbox" for="genres">Horror</label><br>
-        <input type="checkbox" class="checkbox" name="genres" value="7077"><label class="checkbox" for="genres">Independent</label>
-        <input type="checkbox" class="checkbox" name="genres" value="5977"><label class="checkbox" for="genres">LGBTQ+</label>
-        <input type="checkbox" class="checkbox" name="genres" value="1701, 13335"><label class="checkbox" for="genres">Music & Musicals</label>
-        <input type="checkbox" class="checkbox" name="genres" value="8883"><label class="checkbox" for="genres">Romance</label>
-        <input type="checkbox" class="checkbox" name="genres" value="108533"><label class="checkbox" for="genres">Sci-Fi</label>
-        <input type="checkbox" class="checkbox" name="genres" value="8933"><label class="checkbox" for="genres">Thriller</label>
+        <div class="grid">
+
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="5763">Drama</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="801362">Action</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="6548">Comedy</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="9744">Fantasy</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="8711">Horror</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="8883">Romance</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="8933">Thriller</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="108533">Sci-Fi</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="31574">Classics</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="783, 51056">Children & Family</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="141, 3063">Anime</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="7077">Independent</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="5977">LGBTQ+</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="1701, 13335">Music & Musicals</label>
+          <label class="checkbox" for="genres"><input type="checkbox" class="checkbox" name="genres" value="6839, 2243108">Documentaries</label>
+        </div>
       </label> <br>
       <label class="num-inputs" for="num-options">Number of options:
         <input type="number" name="num-options" min="2" class="num-options" value="10">
@@ -105,8 +108,8 @@
         <input type="number" name="num-participants" min="2" class="num-participants" value="2">
       </label> <br>
       <div class="buttons">
-        <input type="submit" class="form-button" value="Let'go!" id="lets-go">
-        <input type="button" class="form-button" value="Cancel, I'm lame" class="cancel-button">
+        <input type="button" class="form-button" value="I'm lame, ABORT!" class="cancel-button">
+        <input type="submit" class="form-button" value="Submit session" id="lets-go">
       </div>
     </form>
     <form id="go-to-session" class="buttons" action="" method="GET">
