@@ -91,17 +91,6 @@ module.exports = (db) => {
       }
     }
 
-    const insertRandomLocationInArray = function(array, insertArray) {
-      let arrayLength = array.length;
-      insertArray.forEach((elem) => {
-        let randomNum = Math.floor(Math.random()*(arrayLength + 1));
-        array.splice(randomNum, 0, elem);
-        arrayLength = array.length;
-      })
-
-      return array;
-    };
-
     Promise.all(movieIDLookupPromiseArray).then((movieIDPromiseReturnArray) => {
 
       axios.request(options).then((movie) => {
