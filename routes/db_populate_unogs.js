@@ -84,9 +84,7 @@ const fetchUnogsTotal = function(db, dataType) {
   // Fetch Unogs API data
   axios.request(options).then(function (response) {
     const totalObjects = response.data.total; // -> 3962 /100 -> 39.62 -> 40 - 1 -> 39.
-    console.log(totalObjects, Math.ceil(totalObjects / 100) - 1);
     populateTableWithUnogsData(response.data.results, dataType, db);
-    // console.log(Math.ceil(totalObjects / 100) - 1);
     for (let i = 1; i < Math.ceil(totalObjects / 100); i++) {
       fetchUnogsData(db, i * 100, dataType);
     }
@@ -118,8 +116,6 @@ const fetchUnogsData = function(db, offset, dataType) {
 
   // Fetch Unogs API data
   axios.request(options).then(function (response) {
-    // console.log("retrieved unogs data\n", response.data);
-    // console.log(response.data.total);
     populateTableWithUnogsData(response.data.results, dataType, db);
 
   }).catch(function (error) {

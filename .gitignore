@@ -1,6 +1,7 @@
 node_modules/
+npm-debug.log
 public/styles
-.env
+/*.env
 *.log
 *.sqlite3
 .DS_Store
