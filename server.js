@@ -60,13 +60,13 @@ app.get("/", (req, res) => {
 
 // Populate our DB from the unogs API.
 app.get("/populate-total", (req, res) => {
-  unogs.fetchUnogsTotal(db, 'movie');
+  // unogs.fetchUnogsTotal(db, 'movie');
   res.status(200).send("No data to retrieve");
 });
 
 // Populate our DB from the unogs API.
 app.get("/populate-genre", (req, res) => {
-  unogs.fetchUnogsGenreData(db, res);
+  // unogs.fetchUnogsGenreData(db, res);
   res.status(200).send("No data to retrieve");
 });
 
